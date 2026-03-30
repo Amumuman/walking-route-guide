@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=3.0,user-scalable=yes">
+<title>국토대장정 - 대화초 → 삼천동</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<style>
+:root{--fs:18px;--bg:#f5f5f0;--card:#fff;--text:#1a1a1a;--sub:#555;--border:#ddd;--green:#0d9c4f;--blue:#1a73e8;--red:#d63031;--orange:#e67e22;--purple:#8e44ad;--radius:14px;--shadow:0 2px 10px rgba(0,0,0,.08)}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{font-size:var(--fs)}body{font-family:-apple-system,'Malgun Gothic',sans-serif;background:var(--bg);color:var(--text);overflow:hidden;height:100dvh;width:100vw}
+.screen{display:none;flex-direction:column;height:100dvh;width:100%}.screen.active{display:flex}
+button{font-family:inherit;cursor:pointer;border:none;background:none;font-size:1rem}
+h1{font-size:1.3rem;font-weight:700}h2{font-size:1.1rem;font-weight:700}h3{font-size:1rem;font-weight:600}
+.hdr{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--card);border-bottom:1px solid var(--border);min-height:52px;flex-shrink:0;z-index:100}
+.hdr .bk{font-size:1.4rem;padding:8px;min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center}
+.hdr .tt{flex:1;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hdr .sos{background:var(--red);color:#fff;font-size:.9rem;font-weight:700;padding:8px 12px;border-radius:10px;min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center}
+#screen-home{background:linear-gradient(160deg,#e8f5e9 0%,#e3f2fd 100%)}
+.home-h{text-align:center;padding:24px 16px 12px}.home-h h1{font-size:1.5rem}.home-h .s{color:var(--sub);font-size:.9rem;margin-top:6px;line-height:1.5}
+.home-b{flex:1;overflow-y:auto;padding:0 14px 20px;-webkit-overflow-scrolling:touch}
+.rc{background:var(--card);border-radius:var(--radius);padding:16px;margin-bottom:12px;box-shadow:var(--shadow);border-left:5px solid;cursor:pointer;transition:transform .12s}.rc:active{transform:scale(.98)}
+.rc.a{border-left-color:var(--green)}.rc.b{border-left-color:var(--blue)}
+.rc .bg{display:inline-block;padding:3px 8px;border-radius:6px;font-size:.8rem;font-weight:700;color:#fff;margin-bottom:6px}
+.rc.a .bg{background:var(--green)}.rc.b .bg{background:var(--blue)}
+.rc .nm{font-size:1.15rem;font-weight:700;margin-bottom:2px}.rc .dt{color:var(--sub);margin-bottom:8px;font-size:.9rem}
+.rc .pr,.rc .cn{font-size:.85rem;line-height:1.6}.rc .pr span{color:var(--green)}.rc .cn span{color:var(--red)}
+.sn{background:#fff3cd;border-radius:var(--radius);padding:14px;margin-top:8px;font-size:.88rem;line-height:1.6}.sn strong{color:var(--red)}
+.sr{display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap}
+.sr button{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px 16px;font-size:.95rem;font-weight:600;min-width:52px;min-height:44px}
+.hf{padding:10px 14px;text-align:center;font-size:.78rem;color:var(--sub);flex-shrink:0}
+#pace-bar{display:flex;gap:6px;padding:6px 12px;background:var(--card);border-bottom:1px solid var(--border);flex-shrink:0}
+#pace-bar button{flex:1;padding:8px;border-radius:8px;font-weight:600;font-size:.88rem;background:#eee;color:var(--sub);min-height:40px;transition:all .2s}
+#pace-bar button.active{background:var(--green);color:#fff}.route-b #pace-bar button.active{background:var(--blue)}
+#day-tabs{display:flex;gap:5px;padding:6px 10px;overflow-x:auto;flex-shrink:0;background:var(--card);border-bottom:1px solid var(--border);-webkit-overflow-scrolling:touch;scrollbar-width:none}
+#day-tabs::-webkit-scrollbar{display:none}
+#day-tabs button{flex-shrink:0;padding:6px 14px;border-radius:8px;font-size:.85rem;font-weight:600;background:#eee;color:var(--sub);min-height:36px;white-space:nowrap;transition:all .2s}
+#day-tabs button.active{background:var(--text);color:#fff}
+#mc{flex:1;min-height:180px;position:relative}#map{height:100%;width:100%;z-index:1}
+#gs{position:absolute;top:8px;left:8px;z-index:1000;background:rgba(255,255,255,.92);padding:5px 10px;border-radius:6px;font-size:.78rem;display:none;box-shadow:0 1px 4px rgba(0,0,0,.15)}.gs-on{display:block!important}
+#ip{max-height:45dvh;overflow-y:auto;padding:10px 14px 90px;-webkit-overflow-scrolling:touch;flex-shrink:0;background:var(--bg)}
+.dh{margin-bottom:10px}.dh h2{margin-bottom:3px}
+.dh .st{display:flex;gap:10px;flex-wrap:wrap;font-size:.85rem;color:var(--sub)}.dh .st .sf{color:var(--green);font-weight:600}
+.dh .tp{background:#e8f5e9;padding:8px 10px;border-radius:8px;font-size:.85rem;line-height:1.5;margin-top:6px}
+.dh .wn{background:#fff3cd;border-left:3px solid var(--red);padding:8px 10px;border-radius:0 8px 8px 0;font-size:.85rem;line-height:1.5;margin-top:6px}
+.ps{margin-top:12px}.ps h3{margin-bottom:6px;display:flex;align-items:center;gap:5px}
+.pc{background:var(--card);border-radius:10px;padding:12px;margin-bottom:7px;box-shadow:0 1px 3px rgba(0,0,0,.05);border-left:3px solid transparent}
+.pc.fd{border-left-color:var(--orange)}.pc.sy{border-left-color:var(--purple)}.pc.sn2{border-left-color:var(--blue)}.pc.wr{border-left-color:var(--red)}.pc.cv{border-left-color:var(--green)}
+.pc .pn{font-weight:700;font-size:.95rem;margin-bottom:3px}.pc .pd{font-size:.82rem;color:var(--sub);line-height:1.5}
+.pc .pp{color:var(--green);font-weight:600;font-size:.85rem}.pc .pw{color:var(--red);font-weight:600}
+.pc .menu-tag{display:inline-block;background:#fff3e0;color:#e65100;padding:1px 6px;border-radius:4px;font-size:.78rem;font-weight:600;margin-right:4px;margin-bottom:2px}
+.pc .hour-tag{display:inline-block;background:#e3f2fd;color:#1565c0;padding:1px 6px;border-radius:4px;font-size:.78rem;margin-right:4px}
+#bb{position:fixed;bottom:0;left:0;right:0;display:flex;background:var(--card);border-top:1px solid var(--border);padding:6px 10px;padding-bottom:max(6px,env(safe-area-inset-bottom));z-index:200;gap:6px}
+#bb button{flex:1;padding:12px 6px;border-radius:10px;font-size:.9rem;font-weight:600;min-height:48px;background:#eee;transition:all .12s}#bb button:active{background:#ddd}
+#bb .gb{background:var(--blue);color:#fff}#bb .gb.on{background:var(--green)}
+#bb .gx{background:var(--text);color:#fff;font-size:.8rem}
+#em{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:9999;display:none;flex-direction:column;align-items:center;justify-content:center;padding:20px;gap:14px}
+#em.active{display:flex}#em h2{color:#fff;font-size:1.3rem;margin-bottom:4px}
+#em .eb{display:flex;align-items:center;gap:10px;width:100%;max-width:340px;padding:18px 20px;border-radius:14px;font-size:1.15rem;font-weight:700;color:#fff;text-decoration:none;min-height:58px}
+#em .e1{background:#d63031}#em .e2{background:#e67e22}
+#em .ei{background:rgba(255,255,255,.12);color:#fff;font-size:.88rem;padding:14px;border-radius:10px;width:100%;max-width:340px;line-height:1.6}
+#em .ec{color:#fff;font-size:1rem;padding:14px;margin-top:4px;text-decoration:underline}
+/* HELP screen */
+#screen-help .help-body{flex:1;overflow-y:auto;padding:14px;-webkit-overflow-scrolling:touch}
+.help-section{background:var(--card);border-radius:var(--radius);padding:16px;margin-bottom:12px;box-shadow:var(--shadow)}
+.help-section h3{margin-bottom:8px;font-size:1.05rem}.help-section p,.help-section li{font-size:.9rem;line-height:1.6;color:var(--sub)}
+.help-section ol,.help-section ul{padding-left:20px}
+.help-section .step{background:#e3f2fd;padding:8px 12px;border-radius:8px;margin:6px 0;font-size:.88rem}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-thumb{background:#ccc;border-radius:3px}
+body.dark{--bg:#1a1a2e;--card:#16213e;--text:#e8e8e8;--sub:#999;--border:#2a2a4a}
+body.dark .rc,.dark .pc,.dark .help-section{box-shadow:0 2px 8px rgba(0,0,0,.25)}
+body.dark .sn{background:#3d3200;color:#e8e8e8}body.dark .dh .tp{background:#1a3a1a}
+body.dark .dh .wn{background:#3d2200}
+body.dark #pace-bar,body.dark #day-tabs,body.dark .hdr,body.dark #bb{background:var(--card)}
+body.dark #pace-bar button,body.dark #day-tabs button,body.dark #bb button{background:#2a2a4a;color:var(--sub)}
+body.dark .pc .menu-tag{background:#3d2200;color:#ffb74d}body.dark .pc .hour-tag{background:#1a2a4a;color:#90caf9}
+</style>
+</head>
+<body>
+<!-- ===== HOME ===== -->
+<div id="screen-home" class="screen active">
+<div class="home-h"><h1>국토대장정 가이드</h1><div style="font-size:1rem;color:var(--sub)">고양 대화초 → 춘천 삼천동</div><div class="s">루트를 선택하면 일차별 지도·맛집·숙소를 볼 수 있어요</div></div>
+<div class="home-b">
+<div class="rc a" onclick="selRoute('A')"><span class="bg">안전 추천</span><div class="nm">한강변 루트</div><div class="dt">약 130km · 한강공원 → 북한강자전거길</div><div class="pr"><span>✓</span> 전 구간 보행전용길 (차량 분리·완전 평지)<br><span>✓</span> 편의점·화장실·지하철역 풍부<br><span>✓</span> 한강·북한강 풍경 + 방송하기 좋음</div><div class="cn"><span>✗</span> 서울 관통으로 거리 더 김<br><span>✗</span> 주말 자전거 주의</div></div>
+<div class="rc b" onclick="selRoute('B')"><span class="bg">최단거리</span><div class="nm">국도 루트</div><div class="dt">약 108~120km · 의정부 → 경춘로(46번국도)</div><div class="pr"><span>✓</span> 거리 짧음 (20~30km 절약)<br><span>✓</span> 경춘선 전철역 접근 용이<br><span>✓</span> 의정부 부대찌개 등 맛집</div><div class="cn"><span>✗</span> 1일차 사패산 고갯길 (오르막)<br><span>✗</span> 일부 차도 보행 (인도 좁음)<br><span>✗</span> 자동차전용도로 회피 필수 구간</div></div>
+<div class="sn"><strong>팁:</strong> 한강변 루트(A)는 전 구간 평지+차량 분리라 안전하고 방송하기 좋습니다. 기본 20km/일 기준이며, 컨디션에 따라 여유 페이스로 전환 가능.</div>
+<div style="text-align:center;margin-top:14px"><button onclick="showHelp()" style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 24px;font-weight:600;font-size:1rem;min-height:48px">📖 사용법 보기</button></div>
+<div style="margin-top:14px;text-align:center"><div style="font-size:.85rem;color:var(--sub);margin-bottom:6px">글씨 크기 / 화면 모드</div><div class="sr"><button onclick="cfs(-2)">A-</button><button onclick="cfs(2)">A+</button><button onclick="tdk()">🌙/☀️</button></div></div>
+</div>
+<div class="hf">걸으면서 핸드폰으로 보기 편하게 만든 가이드</div>
+</div>
+<!-- ===== HELP ===== -->
+<div id="screen-help" class="screen">
+<div class="hdr"><button class="bk" onclick="goHome()">←</button><div class="tt"><b>사용법 가이드</b></div><div></div></div>
+<div class="help-body">
+<div class="help-section"><h3>1단계: 루트 선택</h3><p>첫 화면에서 <b>한강변 루트</b>(안전) 또는 <b>국도 루트</b>(최단)를 탭하세요.</p></div>
+<div class="help-section"><h3>2단계: 페이스 선택</h3><p><b>기본</b> = 하루 평균 20km (6~7일)<br><b>여유</b> = 하루 평균 14km (8~9일)<br>위쪽 버튼으로 언제든 전환 가능!</p></div>
+<div class="help-section"><h3>3단계: 일차별 보기</h3><ol><li>상단 <b>일차 탭</b>을 탭하면 해당 날의 지도가 뜹니다</li><li>지도 위 <b>마커를 탭</b>하면 상세 정보(메뉴, 가격, 영업시간)가 표시됩니다</li><li>지도 아래로 스크롤하면 <b>맛집·숙소·편의점·전철역</b> 목록이 있습니다</li></ol></div>
+<div class="help-section"><h3>4단계: 걸으면서 사용</h3><ol><li>하단 <b>📍 내 위치</b> 버튼을 탭 → GPS가 켜지고 파란 점으로 현재 위치 표시</li><li>다음 경유지 이름을 확인 → <b>네이버 지도</b>에서 "도보 길찾기"로 검색</li><li>도착하면 이 가이드로 돌아와 다음 경유지 확인</li></ol><div class="step">💡 이 가이드 = 전체 정보 확인용<br>💡 네이버 지도 = 실시간 도보 내비용<br>두 개를 번갈아 쓰는 게 가장 편해요!</div></div>
+<div class="help-section"><h3>5단계: GPX 파일 (몰라도 됨!)</h3><p><b>GPX↓</b> 버튼 = 오늘 루트를 파일로 저장하는 기능입니다.<br>솔직히 <b>안 써도 전혀 문제없어요!</b> 이 가이드 + 네이버 지도면 충분합니다.</p><p style="margin-top:6px;color:var(--sub);font-size:.85rem">혹시 관심 있으면: GPX 파일을 등산/걷기 앱(트랭글, OsmAnd 등)에 불러오면 루트가 지도에 선으로 표시됩니다. 자세한 건 같이 드린 GPX 사용법 파일 참고.</p></div>
+<div class="help-section"><h3>SOS 긴급 버튼</h3><p>오른쪽 위 <b style="color:var(--red)">SOS</b> 버튼 → 경찰(112)·소방(119) 원터치 전화, 가장 가까운 전철역, 내 GPS 좌표가 표시됩니다.</p></div>
+<div class="help-section"><h3>마커 아이콘 설명</h3><p>🚩 출발/도착 &nbsp; 📍 경유지 &nbsp; 🍽️ 식당·맛집<br>🏨 숙소 &nbsp; 🏪 편의점·보급 &nbsp; 🚉 전철역(비상 탈출)</p></div>
+<div class="help-section"><h3>배터리 팁</h3><p>GPS + 방송 + 지도를 동시에 쓰면 배터리가 빨리 닳습니다.<br><b>보조배터리 20,000mAh 이상 필수!</b><br>화면 밝기를 낮추고 사용하지 않을 때 화면을 꺼두세요.</p></div>
+</div>
+</div>
+<!-- ===== ROUTE ===== -->
+<div id="screen-route" class="screen">
+<div class="hdr"><button class="bk" onclick="goHome()">←</button><div class="tt"><span id="rt"></span></div><button class="sos" onclick="showEm()">SOS</button></div>
+<div id="pace-bar"><button onclick="setP('relaxed')">여유</button><button onclick="setP('standard')" class="active">기본 (20km/일)</button></div>
+<div id="day-tabs"></div>
+<div id="mc"><div id="map"></div><div id="gs">📍 GPS 추적 중...</div></div>
+<div id="ip"></div>
+<div id="bb"><button onclick="pDay()">◀ 이전</button><button class="gb" onclick="tGPS()">📍 내 위치</button><button onclick="nDay()">다음 ▶</button><button class="gx" onclick="dlGPX()">GPX↓</button></div>
+</div>
+<!-- ===== EMERGENCY ===== -->
+<div id="em"><h2>긴급 연락</h2><a href="tel:112" class="eb e1">📞 경찰 112</a><a href="tel:119" class="eb e2">🚑 소방/응급 119</a>
+<div class="ei"><div><b>가까운 전철역:</b> <span id="es">위치 확인 중...</span></div><div style="margin-top:6px"><b>내 좌표:</b> <span id="ec">GPS 켜주세요</span></div><div style="margin-top:6px"><b>코레일:</b> 1544-7788</div><div style="margin-top:4px"><b>가평군보건의료원:</b> 031-580-2800</div><div style="margin-top:4px"><b>강원대학교병원:</b> 033-258-2000</div></div>
+<button class="ec" onclick="hideEm()">✕ 닫기</button></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+// ====== DATA ======
+const R={
+A:{id:'A',nm:'한강변 루트',c:'#0d9c4f',paces:{
+relaxed:{lb:'여유 9일 (평균 14km)',days:[
+{t:'대화초→홍대',d:'약 20km',tr:'평지',sf:5,tip:'첫날! 전 구간 한강공원 평지. 행주산성에서 점심 먹고 쉬어가세요.',wn:null,
+w:[{la:37.6714,lo:126.7324,n:'🚩 대화초등학교',tp:'start',ds:'출발지 · 고양시 일산서구 송포로 50'},{la:37.6600,lo:126.7720,n:'일산호수공원',tp:'wp',ds:'3km · 제3주차장 방면'},{la:37.5960,lo:126.8260,n:'행주산성역사공원',tp:'wp',ds:'12km · 점심 맛집 밀집'},{la:37.5670,lo:126.8730,n:'난지한강공원',tp:'wp',ds:'15km'},{la:37.5571,lo:126.9244,n:'홍대입구역',tp:'wp',ds:'20km · 1일차 종료'}],
+f:[{la:37.5965,lo:126.8270,n:'행주산성 원조국수',ds:'30년 전통 · 행주로17번길 10',mn:'잔치국수·비빔국수',pr:'7,000원',hr:'확인 필요',cl:''},
+{la:37.5962,lo:126.8265,n:'행주국수',ds:'행주로17번길 7 · 직접 제면 쫄깃한 면발',mn:'국수·추어국수',pr:'7,000~8,000원',hr:'08:00-20:00',cl:''},
+{la:37.5958,lo:126.8260,n:'가나안국수',ds:'행주산성 부근 · 육전도 맛있음',mn:'어탕국수·장칼국수·육전',pr:'8,000~10,000원',hr:'확인 필요',cl:''},
+{la:37.5555,lo:126.9020,n:'망원시장',ds:'서울 마포구 · 전통시장 먹거리 풍부 · "적은 돈으로 배 채우기 좋은 시장"',mn:'떡볶이·만두·족발·다양',pr:'3,000~10,000원',hr:'10:00~22:00',cl:''},
+{la:37.5575,lo:126.9250,n:'홍대 먹거리거리',ds:'홍대입구역 주변 · 저녁 다양한 선택지',mn:'길거리음식·분식·고기·치킨',pr:'5,000~15,000원',hr:'늦은시간까지',cl:''}],
+s:[{la:37.5580,lo:126.9230,n:'홍대 마마스앤파파스',ds:'도미토리 가능 · 최저가 옵션',pr:'17,000~42,000원',rt:'',ph:''},{la:37.5575,lo:126.9240,n:'홍대 준 게스트하우스',ds:'홍대입구역 도보 7분',pr:'49,000원~',rt:'',ph:''},{la:37.5578,lo:126.9235,n:'홍대 코코아 게스트하우스',ds:'홍대입구역 근처 · 깔끔',pr:'59,900원~',rt:'',ph:''},{la:37.5572,lo:126.9248,n:'하이스트리트 게스트하우스',ds:'시설 좋음 · 홍대 메인거리 근처',pr:'82,000원~',rt:'',ph:''}],
+st:[{la:37.5571,lo:126.9244,n:'🚉 홍대입구역',ds:'2호선/경의중앙선/공항철도'},{la:37.5500,lo:126.9100,n:'🚉 마포구청역',ds:'6호선'}],
+cv:[{la:37.5980,lo:126.8300,n:'행주산성 부근 편의점',ds:'고갯길 전 보급 가능'},{la:37.5670,lo:126.8740,n:'난지한강공원 매점',ds:'음료·간식'},{la:37.5560,lo:126.8970,n:'망원한강공원 편의점',ds:'한강공원 내'}]},
+{t:'홍대→뚝섬',d:'약 14km',tr:'평지',sf:5,tip:'한강 북안 공원길. 이촌한강공원 근처에서 점심.',wn:null,
+w:[{la:37.5571,lo:126.9244,n:'홍대 출발',tp:'start',ds:''},{la:37.5170,lo:126.9720,n:'이촌한강공원',tp:'wp',ds:'7km'},{la:37.5310,lo:127.0440,n:'뚝섬한강공원',tp:'wp',ds:'14km · 종료'}],
+f:[{la:37.5555,lo:126.9020,n:'망원시장 (아침)',ds:'어제 숙소 근처 · 간단히 아침',mn:'토스트·김밥·호떡',pr:'3,000~5,000원',hr:'10:00~',cl:''},{la:37.5175,lo:126.9725,n:'이촌한강공원 식당가',ds:'점심 · 공원 주변',mn:'다양',pr:'8,000~12,000원',hr:'',cl:''},{la:37.5315,lo:127.0450,n:'성수동 맛집거리',ds:'저녁 · 뚝섬역 근처 다양한 카페·식당',mn:'파스타·브런치·한식',pr:'10,000~18,000원',hr:'',cl:''}],
+s:[{la:37.5440,lo:127.0560,n:'성수동 게스트하우스/호텔',ds:'뚝섬역·성수역 근처 야놀자/여기어때 검색',pr:'5~7만원',rt:'',ph:''}],
+st:[{la:37.5350,lo:127.0440,n:'🚉 뚝섬역',ds:'2호선'},{la:37.5445,lo:127.0557,n:'🚉 성수역',ds:'2호선'}],
+cv:[{la:37.5250,lo:127.0100,n:'한강공원 매점/편의점',ds:'1km 간격으로 있음'}]},
+{t:'뚝섬→구리',d:'약 12km',tr:'평지',sf:5,tip:'여유로운 날! 일찍 도착. 구리전통시장 구경하고 저녁 든든히.',wn:null,
+w:[{la:37.5310,lo:127.0440,n:'뚝섬 출발',tp:'start',ds:''},{la:37.5480,lo:127.1050,n:'광나루한강공원',tp:'wp',ds:'7km'},{la:37.5650,lo:127.1380,n:'구리한강시민공원',tp:'wp',ds:'10km · 공원 6.5km'},{la:37.5940,lo:127.1340,n:'구리역',tp:'wp',ds:'12km · 종료'}],
+f:[{la:37.5935,lo:127.1335,n:'큰집돌솥설렁탕',ds:'안골로 51 · 따뜻한 국물',mn:'설렁탕·수육',pr:'10,000~15,000원',hr:'확인 필요',cl:''},{la:37.5930,lo:127.1345,n:'돌다리보쌈',ds:'★4.8 · 구리 돌다리골목 대표',mn:'보쌈·칼국수',pr:'12,000~18,000원',hr:'',cl:''},{la:37.5928,lo:127.1340,n:'잉꼬칼국수',ds:'★4.4 · 서민 가격 푸짐',mn:'칼국수·만두',pr:'8,000~10,000원',hr:'',cl:''},{la:37.5932,lo:127.1338,n:'메밀랑',ds:'아차산로 463',mn:'막국수',pr:'9,000~11,000원',hr:'',cl:''},{la:37.5925,lo:127.1330,n:'구리전통시장',ds:'검배로6번길 31 · 곱창골목·순대타운',mn:'곱창·순대·떡볶이·다양',pr:'5,000~15,000원',hr:'10:00-22:00',cl:''}],
+s:[{la:37.5942,lo:127.1340,n:'구리 그날모텔',ds:'구리역 도보 2분 · 안골로 96-2',pr:'51,000원~',rt:'',ph:''},{la:37.5938,lo:127.1345,n:'호텔야자 구리수택점',ds:'돌다리 곱창골목 도보 5분 · 편의점 1분',pr:'4만원대',rt:'',ph:''},{la:37.5936,lo:127.1348,n:'뉴캐슬호텔',ds:'구리역 도보 800m · 넷플릭스',pr:'4~5만원',rt:'',ph:''},{la:37.5934,lo:127.1342,n:'더스테이여기',ds:'구리전통시장 인근 · 시몬스침대',pr:'4~5만원',rt:'',ph:''}],
+st:[{la:37.5940,lo:127.1340,n:'🚉 구리역',ds:'경의중앙선 · 서울 30분'}],cv:[]},
+{t:'구리→운길산/양수',d:'약 16km',tr:'평지 (강변길)',sf:5,tip:'다산길 1코스! 팔당~운길산 강변이 아름답습니다.',wn:'양수/조안 숙소가 적으니 미리 예약하세요.',
+w:[{la:37.5940,lo:127.1340,n:'구리역 출발',tp:'start',ds:''},{la:37.5700,lo:127.1550,n:'다산신도시',tp:'wp',ds:'5km'},{la:37.5230,lo:127.2850,n:'팔당역',tp:'wp',ds:'12km'},{la:37.5290,lo:127.3470,n:'운길산역',tp:'wp',ds:'16km · 종료'}],
+f:[{la:37.5235,lo:127.2860,n:'팔당 초계국수 본점',ds:'자전거 라이더 종착지 · 매실청+사과식초 숙성 국물',mn:'초계국수',pr:'10,000~12,000원',hr:'확인 필요',cl:''},{la:37.5560,lo:127.3500,n:'죽여주는 동치미국수',ds:'북한강로 547 · 길선상이라 동선 맞음',mn:'동치미국수',pr:'8,000~9,000원',hr:'10:00-20:00',cl:'월요일'},{la:37.5540,lo:127.3480,n:'돌미나리집',ds:'조안면 · 막걸리와 함께',mn:'돌미나리전·국수·도토리묵',pr:'10,000~15,000원',hr:'',cl:''},{la:37.5545,lo:127.3490,n:'소나무집',ds:'조안면 · 푸짐한 토종닭',mn:'누룽지백숙',pr:'35,000~50,000원(2인)',hr:'',cl:''}],
+s:[{la:37.5700,lo:127.1560,n:'저스트슬립호텔 다산신도시',ds:'다산중앙로123번길 7-26',pr:'68,000원~',rt:'',ph:''},{la:37.5300,lo:127.3600,n:'돌체카사호텔',ds:'북한강로989번길 4 · 양수/조안',pr:'7~10만원',rt:'',ph:''}],
+st:[{la:37.5230,lo:127.2850,n:'🚉 팔당역',ds:'경의중앙선'},{la:37.5290,lo:127.3470,n:'🚉 운길산역',ds:'경의중앙선'}],
+cv:[{la:37.5700,lo:127.1560,n:'다산신도시 편의점',ds:'보급 충분'},{la:37.5230,lo:127.2860,n:'팔당역 편의점',ds:'이후 간격 넓어짐!'}]},
+{t:'운길산→대성리',d:'약 12km',tr:'평지 (북한강자전거길)',sf:5,tip:'밝은광장에서 북한강자전거길 시작! 아름다운 강변.',wn:'대성리 이후 편의점 뜸함. 밝은광장에서 물·간식 보급 필수!',
+w:[{la:37.5290,lo:127.3470,n:'운길산역 출발',tp:'start',ds:''},{la:37.5560,lo:127.3650,n:'밝은광장',tp:'wp',ds:'북한강자전거길 시작 · 무인인증센터'},{la:37.6090,lo:127.3400,n:'대성리역',tp:'wp',ds:'12km · 종료'}],
+f:[{la:37.6090,lo:127.3410,n:'대성리역 주변 식당',ds:'소규모 식당·카페',mn:'다양',pr:'8,000~12,000원',hr:'',cl:''}],
+s:[{la:37.6090,lo:127.3415,n:'이틀모텔',ds:'경춘로 63 · 대성리역 도보 5분',pr:'49,000원~(온돌) / 59,000원~(트윈)',rt:'',ph:''}],
+st:[{la:37.6090,lo:127.3400,n:'🚉 대성리역',ds:'경춘선 · 서울(상봉) 약 50분'}],
+cv:[{la:37.5560,lo:127.3660,n:'밝은광장 부근 편의점',ds:'★ 여기서 보급 필수! 이후 3km+ 없음'}]},
+{t:'대성리→청평',d:'약 12km',tr:'평지 (북한강변)',sf:5,tip:'여유 구간. 강변 풍경 즐기며 천천히.',wn:null,
+w:[{la:37.6090,lo:127.3400,n:'대성리 출발',tp:'start',ds:''},{la:37.7100,lo:127.4290,n:'청평역',tp:'wp',ds:'12km · 종료'}],
+f:[{la:37.7105,lo:127.4300,n:'청평호반닭갈비막국수 본점',ds:'1999년 창업 · 직원이 구워줌 · 겨울김치 맛있음',mn:'숯불닭갈비(2인 3만원)·막국수',pr:'닭갈비 15,000원/인',hr:'10:30-20:30',cl:'화요일'},{la:37.7110,lo:127.4285,n:'청평K 숯불닭갈비막국수',ds:'★4.7 리뷰138 · 치즈퐁듀에 닭갈비 디핑',mn:'숯불닭갈비·들깨막국수',pr:'14,000~16,000원/인',hr:'11:30-22:00',cl:'수요일'},{la:37.7108,lo:127.4295,n:'윤원뚝배기짬뽕',ds:'★4.6 · 돌에 나와 끝까지 따뜻',mn:'돌짜장·짬뽕·갈비찜',pr:'9,000~15,000원',hr:'확인 필요',cl:''},{la:37.7112,lo:127.4292,n:'Del Cielo',ds:'★4.5 리뷰407 · 경춘로변 이탈리안',mn:'화덕피자·파스타 · 바질페스토 디핑',pr:'12,000~18,000원',hr:'11:00-20:00',cl:'연중무휴'}],
+s:[{la:37.7100,lo:127.4295,n:'청평 M모텔',ds:'경춘로 662',pr:'40,000원~(일반) / 60,000원~(특실)',rt:'',ph:''},{la:37.7105,lo:127.4280,n:'청평 파인호텔',ds:'금연 객실 · 전자레인지·정수기',pr:'4~5만원',rt:'',ph:''},{la:37.7103,lo:127.4288,n:'청평 강변모텔',ds:'청평역 도보 10분 · 다소 노후하나 깨끗',pr:'3~4만원',rt:'',ph:''},{la:37.7115,lo:127.4275,n:'인터라켄펜션',ds:'★4.1 리뷰89 · 아침식사 포함·바베큐',pr:'7~10만원',rt:'',ph:'031-585-4789'},{la:37.7118,lo:127.4278,n:'어거스트청평',ds:'★4.4 리뷰88 · 강변뷰·야외온수풀',pr:'7~10만원',rt:'',ph:'1577-3446'}],
+st:[{la:37.7100,lo:127.4290,n:'🚉 청평역',ds:'경춘선 · 서울(상봉) 약 1시간'}],cv:[]},
+{t:'청평→가평',d:'약 15km',tr:'완만',sf:4,tip:'설악면에서 꼭 점심! 이 루트 최대 인기 맛집. 가평 도착 후 자라섬 산책.',wn:null,
+w:[{la:37.7100,lo:127.4290,n:'청평역 출발',tp:'start',ds:''},{la:37.7450,lo:127.4600,n:'설악면',tp:'wp',ds:'10km · 점심 맛집!'},{la:37.8150,lo:127.5120,n:'가평역',tp:'wp',ds:'15km · 종료'}],
+f:[{la:37.7450,lo:127.4610,n:'설악막국수 춘천닭갈비 본점',ds:'★4.2 리뷰1891! · 숯불향 일품 · 잣 육수 물막국수',mn:'숯불닭갈비 14,000원/인 · 막국수 9,000원',pr:'2인 3만원+',hr:'10:30-21:00 (브레이크 15-16시)',cl:'화요일'},{la:37.7455,lo:127.4605,n:'청평호반닭갈비 설악점',ds:'금~수 영업',mn:'숯불닭갈비·막국수',pr:'14,000원/인',hr:'10:00-20:30 (브레이크 15-16:30)',cl:'목요일'},{la:37.7448,lo:127.4615,n:'모닭 숯불닭갈비',ds:'★4.8 리뷰76 · 숨은 맛집 · 국내산 닭',mn:'소금/양념/양마 3종 닭갈비 · 밀쌈+채소',pr:'14,000~16,000원/인',hr:'11:00-21:00',cl:'화요일'},{la:37.8155,lo:127.5130,n:'가평 잣두부·잣국수',ds:'가평 특산물 잣 요리 · 청하가든 등',mn:'잣국수·잣만두국·메밀막국수',pr:'9,000~12,000원',hr:'',cl:''}],
+s:[{la:37.8155,lo:127.5125,n:'HOTEL JARA',ds:'24시 체크인·넷플릭스·깨끗·주인 친절',pr:'7만원대',rt:'★4.1(76)',ph:'010-7576-9614'},{la:37.8145,lo:127.5115,n:'THESTAY',ds:'가평역·자라섬 도보 5~10분 · 라면자판기·커피무료',pr:'5~6만원',rt:'★3.9(26)',ph:''},{la:37.8148,lo:127.5122,n:'가평 올라펜션',ds:'가평역 권역',pr:'5.9만원~',rt:'',ph:''},{la:37.8152,lo:127.5118,n:'슈가펜션',ds:'조리도구·바베큐장·야외수영장(여름)',pr:'5만원 미만',rt:'',ph:''}],
+st:[{la:37.8150,lo:127.5120,n:'🚉 가평역',ds:'경춘선 · 서울(상봉) 약 1시간10분'}],
+cv:[{la:37.7450,lo:127.4620,n:'설악면 편의점',ds:'청평~가평 중간 보급 가능'}]},
+{t:'가평→강촌',d:'약 13km',tr:'평지 (북한강변)',sf:4,tip:'남이섬 입구를 지나갑니다. 북한강 최고 경관!',wn:'가평~강촌 편의점 제한적. 가평에서 물·간식 보급하세요!',
+w:[{la:37.8150,lo:127.5120,n:'가평역 출발',tp:'start',ds:''},{la:37.7945,lo:127.5269,n:'남이섬 입구',tp:'wp',ds:'3km · 유람선 선착장'},{la:37.8098,lo:127.6262,n:'강촌역',tp:'wp',ds:'13km · 종료'}],
+f:[{la:37.8100,lo:127.6270,n:'강촌토종닭갈비',ds:'강촌로 97 · ★4.4 리뷰199 · 양 많고 저렴!',mn:'철판닭갈비 · 양배추·고구마·깻잎·떡',pr:'12,000~14,000원/인',hr:'11:00-21:30',cl:''},{la:37.8095,lo:127.6255,n:'우물집',ds:'★4.8 · 40년 전통 2대째 · TV 생생정보 출연',mn:'숯불닭갈비·소금구이·메밀막국수·감자전',pr:'13,000~15,000원/인',hr:'확인 필요',cl:''},{la:37.8097,lo:127.6260,n:'원조중앙닭갈비',ds:'★4.6 · 강촌 상위 랭킹',mn:'닭갈비+막국수 세트',pr:'13,000~15,000원/인',hr:'',cl:''},{la:37.8102,lo:127.6268,n:'옛터숯불닭갈비',ds:'숯불향 진한 닭갈비',mn:'숯불닭갈비',pr:'12,000원/인',hr:'',cl:''},{la:37.8092,lo:127.6258,n:'조부자매운순대가',ds:'★4.5 · 도보 여행 후 든든',mn:'매운순대국밥',pr:'9,000~11,000원',hr:'',cl:''}],
+s:[{la:37.8100,lo:127.6260,n:'숲속의강촌',ds:'조용·주인 매우 친절·펜션형',pr:'5~7만원',rt:'★4.0(27)',ph:'033-261-1291'},{la:37.8102,lo:127.6265,n:'뷰티풀강촌',ds:'바베큐 가능·가성비',pr:'4~6만원',rt:'★3.9(36)',ph:'033-261-3355'},{la:37.8104,lo:127.6262,n:'테마펜션',ds:'강촌구곡길 8',pr:'50,000원~',rt:'',ph:''},{la:37.8099,lo:127.6266,n:'강촌 W펜션',ds:'강촌역 도보 3분 · 좋은 위치',pr:'5~7만원',rt:'',ph:''},{la:37.8096,lo:127.6264,n:'김삿갓 펜션민박',ds:'강촌로 68-1 · 민박·식당 겸영 · 도보여행자 적합',pr:'3~5만원',rt:'',ph:''}],
+st:[{la:37.8098,lo:127.6262,n:'🚉 강촌역',ds:'경춘선 · 서울(상봉) 약 1시간20분'}],cv:[]},
+{t:'강촌→삼천동 🏁',d:'약 15km',tr:'완만 (의암호변)',sf:4,tip:'마지막 날! 신매대교 지나면 춘천. 완주 축하합니다!',wn:null,
+w:[{la:37.8098,lo:127.6262,n:'강촌역 출발',tp:'start',ds:''},{la:37.8550,lo:127.6700,n:'의암댐',tp:'wp',ds:'8km'},{la:37.8700,lo:127.7020,n:'신매대교',tp:'wp',ds:'10km · 북한강자전거길 종점'},{la:37.8690,lo:127.7050,n:'🏁 삼천동 (공지천)',tp:'goal',ds:'★ 130km 완주! ★'}],
+f:[{la:37.8688,lo:127.7055,n:'춘천명물닭갈비',ds:'★4.9 · 백년가게(1989) · 삼천동 옛경춘로 813',mn:'뼈없는닭갈비 15,000원 · 막국수 9,000원 · 볶음밥 3,000원',pr:'15,000원/인',hr:'확인 필요',cl:'주말 웨이팅 필수'},{la:37.8685,lo:127.7045,n:'삼대막국수',ds:'남춘로5번길 22 · 안정적',mn:'막국수',pr:'8,000~9,000원',hr:'11:00-20:30',cl:''},{la:37.8683,lo:127.7048,n:'샘밭막국수 본점',ds:'1970년 백년가게 3대째 · 메밀80%',mn:'막국수 8,000원 · 감자전·편육 추천',pr:'8,000원',hr:'확인 필요',cl:''},{la:37.8680,lo:127.7040,n:'구정막국수 춘천점',ds:'★4.4 리뷰85 · 삼천동 · 회막국수+동치미 일품',mn:'회막국수·비빔막국수·메밀전병',pr:'9,000~11,000원',hr:'11:00-21:00 (LO 20:00)',cl:'수요일'},{la:37.8750,lo:127.7200,n:'우미닭갈비 본점',ds:'50년 전통 · 명동 닭갈비골목 · 무한도전 촬영지',mn:'철판닭갈비',pr:'12,000~15,000원/인',hr:'',cl:''},{la:37.8748,lo:127.7195,n:'통나무집 닭갈비',ds:'현지인+관광객 모두 찾는 곳',mn:'닭갈비',pr:'12,000~15,000원/인',hr:'10:30-21:30 (LO 20:30)',cl:'연중무휴'}],
+s:[{la:37.8690,lo:127.7055,n:'감성료칸 우사기',ds:'삼천동',pr:'34,600원~',rt:'',ph:''},{la:37.8692,lo:127.7048,n:'모텔홀인원',ds:'삼천동 춘천호 산책로 · 리모델링 완료',pr:'3~5만원',rt:'★3.7',ph:'033-256-1566'},{la:37.8695,lo:127.7055,n:'호텔엔 Hotel-Aen',ds:'2인 스파 · 무료 음료·과자',pr:'5만원대',rt:'★4.0',ph:'033-243-5353'},{la:37.8842,lo:127.7170,n:'어베인호텔',ds:'남춘천역·명동 도보 5분 · 24시 프리바(시리얼·토스트·커피)',pr:'25,000원~(쿠폰)',rt:'',ph:''},{la:37.8845,lo:127.7165,n:'게스트하우스 휴 춘천역',ds:'조식 제공 · 세탁기·주방 완비',pr:'3만원대~',rt:'',ph:''},{la:37.8840,lo:127.7175,n:'그랜드모텔',ds:'춘천역 근처 최저가 · 온돌방 난방 좋음',pr:'3~4만원',rt:'★3.3',ph:'033-243-5021'}],
+st:[{la:37.8710,lo:127.7180,n:'🚉 남춘천역',ds:'경춘선'},{la:37.8842,lo:127.7168,n:'🚉 춘천역',ds:'경춘선 / ITX-청춘→용산 1시간10분'}],cv:[]}
+]},
+standard:{lb:'기본 7일 (평균 18km)',days:[
+{t:'대화초→홍대/망원',d:'약 22km',tr:'평지',sf:5,tip:'전 구간 한강공원 평지. 행주산성서 점심, 망원시장서 저녁.',wn:null,w:[{la:37.6714,lo:126.7324,n:'🚩 대화초등학교',tp:'start',ds:'출발지'},{la:37.6600,lo:126.7720,n:'일산호수공원',tp:'wp',ds:'3km'},{la:37.5960,lo:126.8260,n:'행주산성역사공원',tp:'wp',ds:'12km'},{la:37.5670,lo:126.8730,n:'난지한강공원',tp:'wp',ds:'15km'},{la:37.5571,lo:126.9244,n:'홍대입구역',tp:'wp',ds:'22km'}],f:[{la:37.5965,lo:126.8270,n:'행주산성 원조국수',ds:'30년 전통',mn:'잔치국수·비빔국수',pr:'7,000원',hr:'',cl:''},{la:37.5962,lo:126.8265,n:'행주국수',ds:'직접 제면 쫄깃',mn:'국수·추어국수',pr:'7,000~8,000원',hr:'08:00-20:00',cl:''},{la:37.5958,lo:126.8260,n:'가나안국수',ds:'육전도 맛있음',mn:'어탕국수·장칼국수·육전',pr:'8,000~10,000원',hr:'',cl:''},{la:37.5555,lo:126.9020,n:'망원시장',ds:'전통시장 먹거리',mn:'다양',pr:'3,000~10,000원',hr:'10:00~22:00',cl:''}],s:[{la:37.5580,lo:126.9230,n:'홍대 마마스앤파파스',ds:'도미토리 최저가',pr:'17,000~42,000원',rt:'',ph:''},{la:37.5575,lo:126.9240,n:'홍대 준 게스트하우스',ds:'홍대입구역 도보 7분',pr:'49,000원~',rt:'',ph:''},{la:37.5578,lo:126.9235,n:'홍대 코코아 게스트하우스',ds:'깔끔',pr:'59,900원~',rt:'',ph:''}],st:[{la:37.5571,lo:126.9244,n:'🚉 홍대입구역',ds:'2호선/경의중앙선'}],cv:[{la:37.5980,lo:126.8300,n:'행주산성 편의점',ds:''},{la:37.5670,lo:126.8740,n:'난지한강공원 매점',ds:''}]},
+{t:'홍대→구리',d:'약 22km',tr:'평지',sf:5,tip:'한강 북안 종주. 구리전통시장서 저녁.',wn:null,w:[{la:37.5571,lo:126.9244,n:'홍대 출발',tp:'start',ds:''},{la:37.5310,lo:127.0440,n:'뚝섬한강공원',tp:'wp',ds:'12km'},{la:37.5480,lo:127.1050,n:'광나루한강공원',tp:'wp',ds:'17km'},{la:37.5940,lo:127.1340,n:'구리역',tp:'wp',ds:'22km'}],f:[{la:37.5935,lo:127.1335,n:'큰집돌솥설렁탕',ds:'안골로 51',mn:'설렁탕·수육',pr:'10,000~15,000원',hr:'',cl:''},{la:37.5930,lo:127.1345,n:'돌다리보쌈',ds:'★4.8 · 구리 대표',mn:'보쌈·칼국수',pr:'12,000~18,000원',hr:'',cl:''},{la:37.5928,lo:127.1340,n:'잉꼬칼국수',ds:'★4.4 · 푸짐',mn:'칼국수·만두',pr:'8,000~10,000원',hr:'',cl:''},{la:37.5925,lo:127.1330,n:'구리전통시장',ds:'곱창골목·순대타운',mn:'다양',pr:'5,000~15,000원',hr:'10:00-22:00',cl:''}],s:[{la:37.5942,lo:127.1340,n:'구리 그날모텔',ds:'구리역 도보 2분',pr:'51,000원~',rt:'',ph:''},{la:37.5938,lo:127.1345,n:'호텔야자 구리수택점',ds:'편의점 1분',pr:'4만원대',rt:'',ph:''},{la:37.5936,lo:127.1348,n:'뉴캐슬호텔',ds:'넷플릭스',pr:'4~5만원',rt:'',ph:''}],st:[{la:37.5940,lo:127.1340,n:'🚉 구리역',ds:'경의중앙선'}],cv:[]},
+{t:'구리→운길산',d:'약 18km',tr:'평지(강변)',sf:5,tip:'다산길 1코스. 팔당~운길산 아름다운 강변.',wn:null,w:[{la:37.5940,lo:127.1340,n:'구리 출발',tp:'start',ds:''},{la:37.5230,lo:127.2850,n:'팔당역',tp:'wp',ds:'12km'},{la:37.5290,lo:127.3470,n:'운길산역',tp:'wp',ds:'18km'}],f:[{la:37.5235,lo:127.2860,n:'팔당 초계국수 본점',ds:'자전거 라이더 성지',mn:'초계국수',pr:'10,000~12,000원',hr:'',cl:''},{la:37.5560,lo:127.3500,n:'죽여주는 동치미국수',ds:'북한강로 547',mn:'동치미국수',pr:'8,000원',hr:'10:00-20:00',cl:'월요일'},{la:37.5540,lo:127.3480,n:'돌미나리집',ds:'조안면',mn:'돌미나리전·국수·도토리묵',pr:'10,000~15,000원',hr:'',cl:''}],s:[{la:37.5300,lo:127.3600,n:'돌체카사호텔',ds:'양수/조안',pr:'7~10만원',rt:'',ph:''},{la:37.5700,lo:127.1560,n:'저스트슬립호텔 다산',ds:'구간 초반에 위치',pr:'68,000원~',rt:'',ph:''}],st:[{la:37.5290,lo:127.3470,n:'🚉 운길산역',ds:'경의중앙선'}],cv:[{la:37.5230,lo:127.2860,n:'팔당역 편의점',ds:'이후 간격 넓어짐'}]},
+{t:'운길산→청평',d:'약 22km',tr:'평지(북한강)',sf:5,tip:'밝은광장서 북한강자전거길 합류!',wn:'대성리~청평 편의점 뜸함. 물·간식 미리!',w:[{la:37.5290,lo:127.3470,n:'운길산 출발',tp:'start',ds:''},{la:37.5560,lo:127.3650,n:'밝은광장',tp:'wp',ds:'북한강자전거길 시작'},{la:37.6090,lo:127.3400,n:'대성리역',tp:'wp',ds:'12km'},{la:37.7100,lo:127.4290,n:'청평역',tp:'wp',ds:'22km'}],f:[{la:37.7105,lo:127.4300,n:'청평호반닭갈비막국수',ds:'1999년 창업 · 직원이 구워줌',mn:'숯불닭갈비·막국수',pr:'닭갈비2인 3만원',hr:'10:30-20:30',cl:'화요일'},{la:37.7110,lo:127.4285,n:'청평K 숯불닭갈비',ds:'★4.7 · 치즈퐁듀 디핑',mn:'닭갈비·들깨막국수',pr:'14,000~16,000원/인',hr:'11:30-22:00',cl:'수요일'},{la:37.7108,lo:127.4295,n:'윤원뚝배기짬뽕',ds:'★4.6',mn:'돌짜장·짬뽕·갈비찜',pr:'9,000~15,000원',hr:'',cl:''}],s:[{la:37.7100,lo:127.4295,n:'청평 M모텔',ds:'경춘로 662',pr:'40,000원~',rt:'',ph:''},{la:37.7105,lo:127.4280,n:'청평 파인호텔',ds:'금연 객실',pr:'4~5만원',rt:'',ph:''},{la:37.7103,lo:127.4288,n:'청평 강변모텔',ds:'청평역 도보 10분',pr:'3~4만원',rt:'',ph:''},{la:37.7115,lo:127.4275,n:'인터라켄펜션',ds:'아침식사 포함·바베큐',pr:'7~10만원',rt:'★4.1',ph:'031-585-4789'}],st:[{la:37.7100,lo:127.4290,n:'🚉 청평역',ds:'경춘선'}],cv:[{la:37.5560,lo:127.3660,n:'밝은광장 편의점',ds:'보급 필수'}]},
+{t:'청평→가평',d:'약 15km',tr:'완만',sf:4,tip:'설악면 인기맛집! 가평서 자라섬 산책.',wn:null,w:[{la:37.7100,lo:127.4290,n:'청평 출발',tp:'start',ds:''},{la:37.7450,lo:127.4600,n:'설악면',tp:'wp',ds:'10km'},{la:37.8150,lo:127.5120,n:'가평역',tp:'wp',ds:'15km'}],f:[{la:37.7450,lo:127.4610,n:'설악막국수닭갈비 본점',ds:'★4.2 리뷰1891 · 숯불향 일품',mn:'숯불닭갈비14,000원·막국수9,000원',pr:'2인3만원+',hr:'10:30-21:00(브레이크15-16)',cl:'화요일'},{la:37.7448,lo:127.4615,n:'모닭 숯불닭갈비',ds:'★4.8 · 숨은맛집',mn:'3종닭갈비·밀쌈+채소',pr:'14,000~16,000원/인',hr:'11:00-21:00',cl:'화요일'},{la:37.8155,lo:127.5130,n:'가평 잣국수(청하가든)',ds:'가평 특산물',mn:'잣국수·잣만두국',pr:'9,000~12,000원',hr:'',cl:''}],s:[{la:37.8155,lo:127.5125,n:'HOTEL JARA',ds:'24시 체크인·넷플릭스',pr:'7만원대',rt:'★4.1',ph:'010-7576-9614'},{la:37.8145,lo:127.5115,n:'THESTAY',ds:'가평역 도보5~10분·커피무료',pr:'5~6만원',rt:'★3.9',ph:''},{la:37.8152,lo:127.5118,n:'슈가펜션',ds:'조리도구·바베큐장',pr:'5만원 미만',rt:'',ph:''}],st:[{la:37.8150,lo:127.5120,n:'🚉 가평역',ds:'경춘선'}],cv:[]},
+{t:'가평→강촌',d:'약 13km',tr:'평지',sf:4,tip:'남이섬 입구. 가평서 보급 후 출발!',wn:'가평~강촌 편의점 제한. 가평서 보급!',w:[{la:37.8150,lo:127.5120,n:'가평 출발',tp:'start',ds:''},{la:37.7945,lo:127.5269,n:'남이섬 입구',tp:'wp',ds:'3km'},{la:37.8098,lo:127.6262,n:'강촌역',tp:'wp',ds:'13km'}],f:[{la:37.8100,lo:127.6270,n:'강촌토종닭갈비',ds:'★4.4 양 많고 저렴',mn:'철판닭갈비',pr:'12,000~14,000원/인',hr:'11:00-21:30',cl:''},{la:37.8095,lo:127.6255,n:'우물집',ds:'★4.8 · 40년 전통',mn:'숯불닭갈비·메밀막국수·감자전',pr:'13,000~15,000원/인',hr:'',cl:''},{la:37.8097,lo:127.6260,n:'원조중앙닭갈비',ds:'★4.6',mn:'닭갈비+막국수',pr:'13,000~15,000원/인',hr:'',cl:''},{la:37.8092,lo:127.6258,n:'조부자매운순대가',ds:'★4.5 · 든든',mn:'매운순대국밥',pr:'9,000~11,000원',hr:'',cl:''}],s:[{la:37.8100,lo:127.6260,n:'숲속의강촌',ds:'조용·주인친절',pr:'5~7만원',rt:'★4.0',ph:'033-261-1291'},{la:37.8102,lo:127.6265,n:'뷰티풀강촌',ds:'바베큐·가성비',pr:'4~6만원',rt:'★3.9',ph:'033-261-3355'},{la:37.8099,lo:127.6266,n:'강촌W펜션',ds:'강촌역 도보3분',pr:'5~7만원',rt:'',ph:''}],st:[{la:37.8098,lo:127.6262,n:'🚉 강촌역',ds:'경춘선'}],cv:[]},
+{t:'강촌→삼천동 🏁',d:'약 15km',tr:'완만',sf:4,tip:'마지막 날! 완주!',wn:null,w:[{la:37.8098,lo:127.6262,n:'강촌 출발',tp:'start',ds:''},{la:37.8550,lo:127.6700,n:'의암댐',tp:'wp',ds:'8km'},{la:37.8700,lo:127.7020,n:'신매대교',tp:'wp',ds:'10km'},{la:37.8690,lo:127.7050,n:'🏁 삼천동',tp:'goal',ds:'★ 완주! ★'}],f:[{la:37.8688,lo:127.7055,n:'춘천명물닭갈비',ds:'★4.9 백년가게',mn:'뼈없는닭갈비15,000원·막국수9,000원',pr:'15,000원/인',hr:'',cl:''},{la:37.8685,lo:127.7045,n:'삼대막국수',ds:'안정적',mn:'막국수',pr:'8,000원',hr:'11:00-20:30',cl:''},{la:37.8683,lo:127.7048,n:'샘밭막국수',ds:'백년가게·메밀80%',mn:'막국수8,000원',pr:'8,000원',hr:'',cl:''},{la:37.8680,lo:127.7040,n:'구정막국수',ds:'★4.4 삼천동',mn:'회막국수·비빔막국수',pr:'9,000~11,000원',hr:'11:00-21:00(LO20:00)',cl:'수요일'},{la:37.8750,lo:127.7200,n:'우미닭갈비',ds:'50년 전통·무한도전',mn:'철판닭갈비',pr:'12,000~15,000원/인',hr:'',cl:''}],s:[{la:37.8690,lo:127.7055,n:'감성료칸 우사기',ds:'삼천동',pr:'34,600원~',rt:'',ph:''},{la:37.8692,lo:127.7048,n:'모텔홀인원',ds:'리모델링',pr:'3~5만원',rt:'★3.7',ph:'033-256-1566'},{la:37.8842,lo:127.7170,n:'어베인호텔',ds:'24시 프리바',pr:'25,000원~(쿠폰)',rt:'',ph:''},{la:37.8845,lo:127.7165,n:'게스트하우스 휴',ds:'조식·세탁기',pr:'3만원대~',rt:'',ph:''}],st:[{la:37.8842,lo:127.7168,n:'🚉 춘천역',ds:'ITX-청춘→용산 1시간10분'}],cv:[]}
+]}
+}},
+B:{id:'B',nm:'국도 루트',c:'#1a73e8',paces:{
+relaxed:{lb:'여유 8일 (평균 15km)',days:[
+{t:'대화초→송추',d:'약 17km',tr:'후반 오르막(고갯길)',sf:3,tip:'1일차 후반 사패산 고갯길. 반사조끼 착용!',wn:'벽제~송추: 차량 많고 인도 좁음. 반사조끼 필수!',w:[{la:37.6714,lo:126.7324,n:'🚩 대화초등학교',tp:'start',ds:'출발지'},{la:37.6335,lo:126.8716,n:'화정역',tp:'wp',ds:'5km'},{la:37.6485,lo:126.9157,n:'삼송역',tp:'wp',ds:'10km · 39번국도'},{la:37.6750,lo:126.9430,n:'벽제/고양동',tp:'wp',ds:'13km'},{la:37.7120,lo:126.9880,n:'송추',tp:'wp',ds:'17km · 종료'}],f:[{la:37.6340,lo:126.8720,n:'화정역 로데오거리',ds:'아침 다양한 식당',mn:'다양',pr:'6,000~10,000원',hr:'',cl:''},{la:37.7125,lo:126.9885,n:'송추계곡 식당가',ds:'저녁',mn:'오리·닭백숙 등',pr:'10,000~20,000원',hr:'',cl:''}],s:[{la:37.7125,lo:126.9890,n:'송추 부근 펜션/모텔',ds:'야놀자/여기어때 검색',pr:'4~6만원',rt:'',ph:''}],st:[{la:37.6485,lo:126.9157,n:'🚉 삼송역',ds:'3호선'}],cv:[{la:37.6750,lo:126.9435,n:'벽제 편의점',ds:'★ 고갯길 전 마지막 보급!'}]},
+{t:'송추→의정부',d:'약 5km',tr:'내리막→평지',sf:4,tip:'짧은 구간! 부대찌개골목에서 여유롭게.',wn:null,w:[{la:37.7120,lo:126.9880,n:'송추 출발',tp:'start',ds:''},{la:37.7384,lo:127.0457,n:'의정부역',tp:'wp',ds:'5km · 종료'}],f:[{la:37.7380,lo:127.0460,n:'경원식당 본점',ds:'★4.4 리뷰699 · 부대찌개골목 최고평점',mn:'부대찌개',pr:'12,000원/인',hr:'10:00-21:00',cl:'화요일'},{la:37.7385,lo:127.0455,n:'보영식당 본점',ds:'★4.2 · 1978년 46년 전통 · 불판식',mn:'부대찌개(공깃밥 포함) · 떡볶이 서비스',pr:'12,000원/인',hr:'08:00-21:00(LO 20:30)',cl:'연중무휴'},{la:37.7382,lo:127.0462,n:'오뎅식당',ds:'★3.8 리뷰2841 · 대한민국 최초 부대찌개',mn:'부대찌개 · 시원깔끔한 국물',pr:'10,000~12,000원',hr:'08:30-21:30',cl:'연중무휴'},{la:37.7388,lo:127.0458,n:'의정부명물부대찌개',ds:'호국로1297번길 26-20',mn:'명물부대찌개 10,000원 · 부대볶음 13,000원',pr:'10,000~13,000원',hr:'09:00-23:00',cl:'연중무휴'},{la:37.7386,lo:127.0465,n:'형네식당',ds:'호국로1309번길 7',mn:'부대찌개 12,000원 · 모둠사리 10,000원',pr:'12,000원/인',hr:'08:30-21:30',cl:''}],s:[{la:37.7385,lo:127.0460,n:'그루모텔',ds:'★4.1(44) · 깨끗·직원친절',pr:'4~5만원',rt:'★4.1',ph:'031-841-7795'},{la:37.7388,lo:127.0465,n:'라온모텔',ds:'비흡연',pr:'4만원대',rt:'★4.0',ph:''}],st:[{la:37.7384,lo:127.0457,n:'🚉 의정부역',ds:'1호선 · 서울 40분'}],cv:[]},
+{t:'의정부→퇴계원',d:'약 12km',tr:'평지',sf:4,tip:'43번국도 남행. 별내신도시서 점심.',wn:null,w:[{la:37.7384,lo:127.0457,n:'의정부 출발',tp:'start',ds:''},{la:37.7070,lo:127.1120,n:'별내동',tp:'wp',ds:'8km'},{la:37.6560,lo:127.1250,n:'퇴계원사거리',tp:'wp',ds:'12km · 종료'}],f:[{la:37.7075,lo:127.1125,n:'별내신도시 식당가',ds:'다양',mn:'한식·중식·분식',pr:'7,000~12,000원',hr:'',cl:''}],s:[{la:37.6565,lo:127.1255,n:'퇴계원 부근 모텔',ds:'야놀자/여기어때',pr:'4~5만원',rt:'',ph:''}],st:[],cv:[{la:37.7070,lo:127.1125,n:'별내신도시 편의점',ds:'보급 충분'}]},
+{t:'퇴계원→마석',d:'약 12km',tr:'평지',sf:3,tip:'반드시 옛 경춘로(6번국도) 이용!',wn:'46번국도 자동차전용도로 절대 진입 금지! 옛 경춘로 이용!',w:[{la:37.6560,lo:127.1250,n:'퇴계원 출발',tp:'start',ds:'옛 경춘로 방면!'},{la:37.6530,lo:127.2100,n:'진건읍',tp:'wp',ds:'7km'},{la:37.6505,lo:127.3003,n:'마석역',tp:'wp',ds:'12km · 종료'}],f:[{la:37.6510,lo:127.3010,n:'마석누룽지닭백숙',ds:'화도읍 대표 맛집 · 국내산 닭 · 피로 회복',mn:'닭백숙·새싹비빔밥·막국수',pr:'15,000~25,000원',hr:'',cl:''},{la:37.6508,lo:127.3008,n:'마석시장 식당가',ds:'백반·칼국수·중식',mn:'다양',pr:'7,000~10,000원',hr:'',cl:''},{la:37.6512,lo:127.3005,n:'진시미엔',ds:'마석역 앞 짬뽕 전문',mn:'짬뽕',pr:'8,000~10,000원',hr:'11:00-21:00',cl:''},{la:37.6506,lo:127.3012,n:'맷돌36 샤브샤브 마석점',ds:'가성비 좋은 샤브샤브',mn:'샤브샤브',pr:'12,000~15,000원',hr:'',cl:''}],s:[{la:37.6508,lo:127.3005,n:'스테이브릿지',ds:'공중위생 최우수 · OTT',pr:'44,000원~',rt:'',ph:''},{la:37.6510,lo:127.3008,n:'마석역 주변 모텔',ds:'야놀자/여기어때 평일',pr:'3~5만원',rt:'',ph:''}],st:[{la:37.6505,lo:127.3003,n:'🚉 마석역',ds:'경춘선 · 상봉 40분'}],cv:[{la:37.6505,lo:127.3010,n:'마석역 편의점',ds:'★ 이후 간격 넓어짐. 보급 필수!'}]},
+{t:'마석→청평',d:'약 18km',tr:'평지(북한강)',sf:4,tip:'대성리부터 북한강 풍경!',wn:'대성리~청평 편의점 뜸함.',w:[{la:37.6505,lo:127.3003,n:'마석 출발',tp:'start',ds:''},{la:37.6090,lo:127.3400,n:'대성리역',tp:'wp',ds:'8km'},{la:37.7100,lo:127.4290,n:'청평역',tp:'wp',ds:'18km'}],f:[{la:37.7105,lo:127.4300,n:'청평호반닭갈비막국수',ds:'1999년 창업',mn:'숯불닭갈비·막국수',pr:'닭갈비2인 3만원',hr:'10:30-20:30',cl:'화요일'},{la:37.7108,lo:127.4295,n:'윤원뚝배기짬뽕',ds:'★4.6',mn:'짬뽕·돌짜장',pr:'9,000~15,000원',hr:'',cl:''},{la:37.7112,lo:127.4292,n:'Del Cielo',ds:'★4.5 이탈리안',mn:'화덕피자·파스타',pr:'12,000~18,000원',hr:'11:00-20:00',cl:'연중무휴'}],s:[{la:37.7100,lo:127.4295,n:'청평 M모텔',ds:'경춘로 662',pr:'40,000원~',rt:'',ph:''},{la:37.7105,lo:127.4280,n:'청평 파인호텔',ds:'금연',pr:'4~5만원',rt:'',ph:''},{la:37.7103,lo:127.4288,n:'청평 강변모텔',ds:'역 도보10분',pr:'3~4만원',rt:'',ph:''}],st:[{la:37.6090,lo:127.3400,n:'🚉 대성리역',ds:'경춘선'},{la:37.7100,lo:127.4290,n:'🚉 청평역',ds:'경춘선'}],cv:[]},
+{t:'청평→가평',d:'약 18km',tr:'완만',sf:4,tip:'설악면 맛집!',wn:null,w:[{la:37.7100,lo:127.4290,n:'청평 출발',tp:'start',ds:''},{la:37.7450,lo:127.4600,n:'설악면',tp:'wp',ds:'10km'},{la:37.8150,lo:127.5120,n:'가평역',tp:'wp',ds:'18km'}],f:[{la:37.7450,lo:127.4610,n:'설악막국수닭갈비 본점',ds:'★4.2 리뷰1891',mn:'숯불닭갈비14,000원·막국수9,000원',pr:'2인3만원+',hr:'10:30-21:00(브15-16)',cl:'화요일'},{la:37.7448,lo:127.4615,n:'모닭 숯불닭갈비',ds:'★4.8 숨은맛집',mn:'3종닭갈비',pr:'14,000~16,000원/인',hr:'11:00-21:00',cl:'화요일'}],s:[{la:37.8155,lo:127.5125,n:'HOTEL JARA',ds:'24시 체크인',pr:'7만원대',rt:'★4.1',ph:'010-7576-9614'},{la:37.8145,lo:127.5115,n:'THESTAY',ds:'커피무료',pr:'5~6만원',rt:'★3.9',ph:''}],st:[{la:37.8150,lo:127.5120,n:'🚉 가평역',ds:'경춘선'}],cv:[]},
+{t:'가평→강촌',d:'약 15km',tr:'평지',sf:4,tip:'남이섬 입구.',wn:'가평~강촌 편의점 제한.',w:[{la:37.8150,lo:127.5120,n:'가평 출발',tp:'start',ds:''},{la:37.7945,lo:127.5269,n:'남이섬 입구',tp:'wp',ds:'3km'},{la:37.8098,lo:127.6262,n:'강촌역',tp:'wp',ds:'15km'}],f:[{la:37.8100,lo:127.6270,n:'강촌토종닭갈비',ds:'★4.4 양많고저렴',mn:'철판닭갈비',pr:'12,000~14,000원/인',hr:'11:00-21:30',cl:''},{la:37.8095,lo:127.6255,n:'우물집',ds:'★4.8 40년전통',mn:'숯불닭갈비·막국수·감자전',pr:'13,000~15,000원/인',hr:'',cl:''},{la:37.8092,lo:127.6258,n:'조부자매운순대가',ds:'★4.5',mn:'매운순대국밥',pr:'9,000~11,000원',hr:'',cl:''}],s:[{la:37.8100,lo:127.6260,n:'숲속의강촌',ds:'조용·펜션',pr:'5~7만원',rt:'★4.0',ph:'033-261-1291'},{la:37.8102,lo:127.6265,n:'뷰티풀강촌',ds:'바베큐',pr:'4~6만원',rt:'★3.9',ph:'033-261-3355'}],st:[{la:37.8098,lo:127.6262,n:'🚉 강촌역',ds:'경춘선'}],cv:[]},
+{t:'강촌→삼천동 🏁',d:'약 15km',tr:'완만',sf:4,tip:'마지막 날!',wn:'의암터널 우회 필수.',w:[{la:37.8098,lo:127.6262,n:'강촌 출발',tp:'start',ds:''},{la:37.8842,lo:127.7168,n:'춘천역',tp:'wp',ds:'12km'},{la:37.8690,lo:127.7050,n:'🏁 삼천동',tp:'goal',ds:'★ 108km 완주! ★'}],f:[{la:37.8688,lo:127.7055,n:'춘천명물닭갈비',ds:'★4.9 백년가게',mn:'뼈없는닭갈비15,000원',pr:'15,000원/인',hr:'',cl:''},{la:37.8685,lo:127.7045,n:'샘밭막국수',ds:'백년가게·메밀80%',mn:'막국수8,000원',pr:'8,000원',hr:'',cl:''},{la:37.8680,lo:127.7040,n:'구정막국수',ds:'★4.4 삼천동',mn:'회막국수',pr:'9,000~11,000원',hr:'11:00-21:00',cl:'수요일'},{la:37.8750,lo:127.7200,n:'통나무집 닭갈비',ds:'현지인 추천',mn:'닭갈비',pr:'12,000~15,000원/인',hr:'10:30-21:30',cl:'연중무휴'}],s:[{la:37.8842,lo:127.7170,n:'어베인호텔',ds:'24시 프리바',pr:'25,000원~(쿠폰)',rt:'',ph:''},{la:37.8690,lo:127.7055,n:'모텔홀인원',ds:'삼천동 리모델링',pr:'3~5만원',rt:'★3.7',ph:'033-256-1566'},{la:37.8845,lo:127.7165,n:'게스트하우스 휴',ds:'조식·세탁기',pr:'3만원대~',rt:'',ph:''}],st:[{la:37.8842,lo:127.7168,n:'🚉 춘천역',ds:'ITX-청춘→용산 1시간10분'}],cv:[]}
+]},
+standard:{lb:'기본 6일 (평균 18km)',days:[
+{t:'대화초→의정부',d:'약 20km',tr:'후반 오르막',sf:3,tip:'오전 일찍 출발.',wn:'벽제~송추~의정부: 차량 많고 인도 좁음. 반사조끼!',w:[{la:37.6714,lo:126.7324,n:'🚩 대화초등학교',tp:'start',ds:'출발지'},{la:37.6335,lo:126.8716,n:'화정역',tp:'wp',ds:'5km'},{la:37.6485,lo:126.9157,n:'삼송역',tp:'wp',ds:'10km'},{la:37.6750,lo:126.9430,n:'벽제',tp:'wp',ds:'13km'},{la:37.7120,lo:126.9880,n:'송추',tp:'wp',ds:'17km'},{la:37.7384,lo:127.0457,n:'의정부역',tp:'wp',ds:'20km'}],f:[{la:37.7380,lo:127.0460,n:'경원식당',ds:'★4.4 부대찌개 최고평점',mn:'부대찌개',pr:'12,000원/인',hr:'10:00-21:00',cl:'화요일'},{la:37.7385,lo:127.0455,n:'보영식당',ds:'46년 전통',mn:'부대찌개(공깃밥포함)',pr:'12,000원/인',hr:'08:00-21:00',cl:'연중무휴'},{la:37.7382,lo:127.0462,n:'오뎅식당',ds:'최초 부대찌개 · 항상 줄',mn:'부대찌개',pr:'10,000~12,000원',hr:'08:30-21:30',cl:'연중무휴'},{la:37.7388,lo:127.0458,n:'의정부명물부대찌개',ds:'',mn:'부대찌개10,000원·부대볶음13,000원',pr:'10,000~13,000원',hr:'09:00-23:00',cl:'연중무휴'}],s:[{la:37.7385,lo:127.0460,n:'그루모텔',ds:'★4.1·깨끗',pr:'4~5만원',rt:'★4.1',ph:'031-841-7795'},{la:37.7388,lo:127.0465,n:'라온모텔',ds:'비흡연',pr:'4만원대',rt:'',ph:''}],st:[{la:37.7384,lo:127.0457,n:'🚉 의정부역',ds:'1호선'}],cv:[{la:37.6750,lo:126.9435,n:'벽제 편의점',ds:'고갯길 전 마지막 보급!'}]},
+{t:'의정부→마석',d:'약 22km',tr:'평지',sf:3,tip:'퇴계원서 반드시 옛 경춘로!',wn:'46번국도 자동차전용도로 절대 금지!',w:[{la:37.7384,lo:127.0457,n:'의정부 출발',tp:'start',ds:''},{la:37.7070,lo:127.1120,n:'별내동',tp:'wp',ds:'8km'},{la:37.6560,lo:127.1250,n:'퇴계원',tp:'wp',ds:'12km·옛경춘로!'},{la:37.6505,lo:127.3003,n:'마석역',tp:'wp',ds:'22km'}],f:[{la:37.6510,lo:127.3010,n:'마석누룽지닭백숙',ds:'피로 회복',mn:'닭백숙·막국수',pr:'15,000~25,000원',hr:'',cl:''},{la:37.6512,lo:127.3005,n:'진시미엔',ds:'마석역 앞',mn:'짬뽕',pr:'8,000~10,000원',hr:'11:00-21:00',cl:''}],s:[{la:37.6510,lo:127.3008,n:'스테이브릿지',ds:'위생 최우수',pr:'44,000원~',rt:'',ph:''},{la:37.6508,lo:127.3005,n:'마석역 모텔',ds:'평일',pr:'3~5만원',rt:'',ph:''}],st:[{la:37.6505,lo:127.3003,n:'🚉 마석역',ds:'경춘선'}],cv:[{la:37.6505,lo:127.3010,n:'마석역 편의점',ds:'이후 간격 넓어짐!'}]},
+{t:'마석→청평',d:'약 18km',tr:'평지',sf:4,tip:'북한강 시작!',wn:'대성리~청평 편의점 뜸함.',w:[{la:37.6505,lo:127.3003,n:'마석 출발',tp:'start',ds:''},{la:37.6090,lo:127.3400,n:'대성리역',tp:'wp',ds:'8km'},{la:37.7100,lo:127.4290,n:'청평역',tp:'wp',ds:'18km'}],f:[{la:37.7105,lo:127.4300,n:'청평호반닭갈비',ds:'직원이 구워줌',mn:'숯불닭갈비·막국수',pr:'닭갈비2인3만원',hr:'10:30-20:30',cl:'화요일'},{la:37.7108,lo:127.4295,n:'윤원뚝배기짬뽕',ds:'★4.6',mn:'짬뽕·돌짜장',pr:'9,000~15,000원',hr:'',cl:''}],s:[{la:37.7100,lo:127.4295,n:'청평 M모텔',ds:'',pr:'40,000원~',rt:'',ph:''},{la:37.7105,lo:127.4280,n:'청평 파인호텔',ds:'금연',pr:'4~5만원',rt:'',ph:''},{la:37.7103,lo:127.4288,n:'청평 강변모텔',ds:'',pr:'3~4만원',rt:'',ph:''}],st:[{la:37.7100,lo:127.4290,n:'🚉 청평역',ds:'경춘선'}],cv:[]},
+{t:'청평→가평',d:'약 18km',tr:'완만',sf:4,tip:'설악면 맛집!',wn:null,w:[{la:37.7100,lo:127.4290,n:'청평 출발',tp:'start',ds:''},{la:37.7450,lo:127.4600,n:'설악면',tp:'wp',ds:'10km'},{la:37.8150,lo:127.5120,n:'가평역',tp:'wp',ds:'18km'}],f:[{la:37.7450,lo:127.4610,n:'설악막국수닭갈비',ds:'★4.2 리뷰1891',mn:'숯불닭갈비·잣막국수',pr:'2인3만원+',hr:'10:30-21:00',cl:'화요일'}],s:[{la:37.8155,lo:127.5125,n:'HOTEL JARA',ds:'24시',pr:'7만원대',rt:'★4.1',ph:''},{la:37.8145,lo:127.5115,n:'THESTAY',ds:'커피무료',pr:'5~6만원',rt:'',ph:''}],st:[{la:37.8150,lo:127.5120,n:'🚉 가평역',ds:'경춘선'}],cv:[]},
+{t:'가평→강촌',d:'약 15km',tr:'평지',sf:4,tip:'남이섬 입구.',wn:'편의점 제한.',w:[{la:37.8150,lo:127.5120,n:'가평 출발',tp:'start',ds:''},{la:37.7945,lo:127.5269,n:'남이섬',tp:'wp',ds:'3km'},{la:37.8098,lo:127.6262,n:'강촌역',tp:'wp',ds:'15km'}],f:[{la:37.8100,lo:127.6270,n:'강촌토종닭갈비',ds:'★4.4',mn:'철판닭갈비',pr:'12,000원/인',hr:'11:00-21:30',cl:''},{la:37.8095,lo:127.6255,n:'우물집',ds:'★4.8 40년전통',mn:'숯불닭갈비·막국수',pr:'13,000원/인',hr:'',cl:''}],s:[{la:37.8100,lo:127.6260,n:'숲속의강촌',ds:'펜션',pr:'5~7만원',rt:'★4.0',ph:'033-261-1291'},{la:37.8102,lo:127.6265,n:'뷰티풀강촌',ds:'바베큐',pr:'4~6만원',rt:'',ph:''}],st:[{la:37.8098,lo:127.6262,n:'🚉 강촌역',ds:'경춘선'}],cv:[]},
+{t:'강촌→삼천동 🏁',d:'약 15km',tr:'완만',sf:4,tip:'마지막 날!',wn:'의암터널 우회.',w:[{la:37.8098,lo:127.6262,n:'강촌 출발',tp:'start',ds:''},{la:37.8842,lo:127.7168,n:'춘천역',tp:'wp',ds:'12km'},{la:37.8690,lo:127.7050,n:'🏁 삼천동',tp:'goal',ds:'★ 완주! ★'}],f:[{la:37.8688,lo:127.7055,n:'춘천명물닭갈비',ds:'★4.9 백년가게',mn:'뼈없는닭갈비',pr:'15,000원/인',hr:'',cl:''},{la:37.8685,lo:127.7045,n:'샘밭막국수',ds:'백년가게',mn:'막국수',pr:'8,000원',hr:'',cl:''},{la:37.8680,lo:127.7040,n:'구정막국수',ds:'★4.4',mn:'회막국수',pr:'9,000~11,000원',hr:'11:00-21:00',cl:'수요일'}],s:[{la:37.8842,lo:127.7170,n:'어베인호텔',ds:'프리바',pr:'25,000원~',rt:'',ph:''},{la:37.8690,lo:127.7055,n:'모텔홀인원',ds:'삼천동',pr:'3~5만원',rt:'',ph:''}],st:[{la:37.8842,lo:127.7168,n:'🚉 춘천역',ds:'ITX-청춘'}],cv:[]}
+]}
+}}
+};
+const ES=[{la:37.5571,lo:126.9244,n:'홍대입구역',l:'2호선'},{la:37.5940,lo:127.1340,n:'구리역',l:'경의중앙선'},{la:37.7384,lo:127.0457,n:'의정부역',l:'1호선'},{la:37.6505,lo:127.3003,n:'마석역',l:'경춘선'},{la:37.6090,lo:127.3400,n:'대성리역',l:'경춘선'},{la:37.7100,lo:127.4290,n:'청평역',l:'경춘선'},{la:37.8150,lo:127.5120,n:'가평역',l:'경춘선'},{la:37.8098,lo:127.6262,n:'강촌역',l:'경춘선'},{la:37.8710,lo:127.7180,n:'남춘천역',l:'경춘선'},{la:37.8842,lo:127.7168,n:'춘천역',l:'경춘선/ITX'}];
+// ====== STATE ======
+let S={r:null,p:'standard',di:0,gps:false},map=null,mks=[],rl=null,lm=null,wid=null,mla=null,mlo=null;
+// ====== NAV ======
+function selRoute(id){S.r=id;S.p='standard';S.di=0;$('screen-home').classList.remove('active');let rs=$('screen-route');rs.classList.add('active');rs.className='screen active'+(id==='B'?' route-b':'');$('rt').textContent=R[id].nm;updP();rTabs();initMap();sDay(0)}
+function goHome(){S.r=null;if(wid){navigator.geolocation.clearWatch(wid);wid=null;S.gps=false}$('screen-route').classList.remove('active');$('screen-help').classList.remove('active');$('screen-home').classList.add('active')}
+function showHelp(){$('screen-home').classList.remove('active');$('screen-help').classList.add('active')}
+function setP(p){S.p=p;S.di=0;updP();rTabs();sDay(0)}
+function updP(){let b=document.querySelectorAll('#pace-bar button');b[0].classList.toggle('active',S.p==='relaxed');b[1].classList.toggle('active',S.p==='standard')}
+function pDay(){if(S.di>0)sDay(S.di-1)}function nDay(){let d=gDays();if(S.di<d.length-1)sDay(S.di+1)}
+function gDays(){return R[S.r].paces[S.p].days}
+function $(id){return document.getElementById(id)}
+// ====== TABS ======
+function rTabs(){let c=$('day-tabs'),d=gDays();c.innerHTML='';d.forEach((x,i)=>{let b=document.createElement('button');b.textContent=(i===d.length-1?'🏁 ':'')+(i+1)+'일차';b.onclick=()=>sDay(i);c.appendChild(b)})}
+// ====== MAP ======
+function initMap(){if(map){map.remove();map=null}map=L.map('map',{zoomControl:false,attributionControl:false}).setView([37.7,127.1],9);L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{maxZoom:19,attribution:'© OpenStreetMap © CARTO'}).addTo(map);L.control.zoom({position:'topright'}).addTo(map)}
+function mI(e,c,sz){sz=sz||32;return L.divIcon({html:'<div style="background:'+c+';border-radius:50%;width:'+sz+'px;height:'+sz+'px;display:flex;align-items:center;justify-content:center;font-size:'+(sz*.48)+'px;border:2px solid #fff;box-shadow:0 2px 5px rgba(0,0,0,.3)">'+e+'</div>',iconSize:[sz,sz],iconAnchor:[sz/2,sz/2],popupAnchor:[0,-sz/2-2],className:''})}
+function clr(){mks.forEach(m=>map.removeLayer(m));mks=[];if(rl){map.removeLayer(rl);rl=null}}
+function sDay(idx){S.di=idx;let d=gDays(),dy=d[idx],tabs=document.querySelectorAll('#day-tabs button');tabs.forEach((t,i)=>t.classList.toggle('active',i===idx));if(tabs[idx])tabs[idx].scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});clr();let co=[];
+dy.w.forEach(w=>{let e='📍',c='#3498db';if(w.tp==='start'){e='🚩';c='#27ae60'}if(w.tp==='goal'){e='🏁';c='#e74c3c'}let m=L.marker([w.la,w.lo],{icon:mI(e,c,w.tp==='start'||w.tp==='goal'?40:32)}).addTo(map);m.bindPopup('<b>'+w.n+'</b>'+(w.ds?'<br><span style="color:#666;font-size:12px">'+w.ds+'</span>':''),{maxWidth:250});mks.push(m);co.push([w.la,w.lo])});
+(dy.f||[]).forEach(f=>{let m=L.marker([f.la,f.lo],{icon:mI('🍽️','#e67e22',30)}).addTo(map);let p='<b>'+f.n+'</b>';if(f.mn)p+='<br><span style="background:#fff3e0;color:#e65100;padding:1px 5px;border-radius:3px;font-size:11px">'+f.mn+'</span>';if(f.pr)p+='<br><b style="color:#27ae60">💰 '+f.pr+'</b>';if(f.hr)p+='<br><span style="color:#1565c0;font-size:11px">⏰ '+f.hr+'</span>';if(f.cl)p+='<br><span style="color:#c62828;font-size:11px">휴무: '+f.cl+'</span>';if(f.ds)p+='<br><span style="color:#666;font-size:11px">'+f.ds+'</span>';m.bindPopup(p,{maxWidth:280});mks.push(m)});
+(dy.s||[]).forEach(s=>{let m=L.marker([s.la,s.lo],{icon:mI('🏨','#8e44ad',30)}).addTo(map);let p='<b>'+s.n+'</b>';if(s.pr)p+='<br><b style="color:#27ae60">💰 '+s.pr+'</b>';if(s.rt)p+='<br>⭐ '+s.rt;if(s.ph)p+='<br>📞 '+s.ph;if(s.ds)p+='<br><span style="color:#666;font-size:11px">'+s.ds+'</span>';m.bindPopup(p,{maxWidth:260});mks.push(m)});
+(dy.st||[]).forEach(s=>{let m=L.marker([s.la,s.lo],{icon:mI('🚉','#2980b9',28)}).addTo(map);m.bindPopup('<b>'+s.n+'</b><br><span style="color:#666;font-size:12px">'+s.ds+'</span><br><span style="color:#c62828;font-size:11px">비상시 전철 귀환 가능</span>',{maxWidth:240});mks.push(m)});
+(dy.cv||[]).forEach(s=>{let m=L.marker([s.la,s.lo],{icon:mI('🏪','#27ae60',26)}).addTo(map);m.bindPopup('<b>'+s.n+'</b><br><span style="color:#666;font-size:12px">'+s.ds+'</span>',{maxWidth:220});mks.push(m)});
+if(co.length>1){rl=L.polyline(co,{color:R[S.r].c,weight:4,opacity:.8,dashArray:'8,8'}).addTo(map)}
+let ac=[...co];(dy.f||[]).forEach(f=>ac.push([f.la,f.lo]));(dy.s||[]).forEach(s=>ac.push([s.la,s.lo]));if(ac.length>0)map.fitBounds(ac,{padding:[25,25],maxZoom:13});rIP(dy,idx,d.length)}
+// ====== INFO PANEL ======
+function rIP(dy,idx,tot){let p=$('ip'),ss='★'.repeat(dy.sf)+'☆'.repeat(5-dy.sf);
+let h='<div class="dh"><h2>'+(idx+1)+'일차: '+dy.t+'</h2><div class="st"><span>📏 '+dy.d+'</span><span>⛰️ '+dy.tr+'</span><span class="sf">안전 '+ss+'</span></div>';
+if(dy.tip)h+='<div class="tp">💡 '+dy.tip+'</div>';if(dy.wn)h+='<div class="wn">⚠️ '+dy.wn+'</div>';h+='</div>';
+if(dy.f&&dy.f.length){h+='<div class="ps"><h3>🍽️ 식당·맛집 ('+dy.f.length+'곳)</h3>';dy.f.forEach(f=>{h+='<div class="pc fd"><div class="pn">'+f.n+'</div>';if(f.mn)h+='<div><span class="menu-tag">'+f.mn+'</span></div>';h+='<div class="pd">'+f.ds+'</div>';let line=[];if(f.pr)line.push('<span class="pp">💰 '+f.pr+'</span>');if(f.hr)line.push('<span class="hour-tag">⏰ '+f.hr+'</span>');if(f.cl)line.push('<span class="pw">휴무: '+f.cl+'</span>');if(line.length)h+='<div style="margin-top:3px">'+line.join(' ')+'</div>';h+='</div>'});h+='</div>'}
+if(dy.s&&dy.s.length){h+='<div class="ps"><h3>🏨 숙소 ('+dy.s.length+'곳 비교)</h3>';dy.s.forEach(s=>{h+='<div class="pc sy"><div class="pn">'+s.n+'</div><div class="pd">'+s.ds+'</div>';let line=[];if(s.pr)line.push('<span class="pp">💰 '+s.pr+'</span>');if(s.rt)line.push('⭐ '+s.rt);if(s.ph)line.push('📞 '+s.ph);if(line.length)h+='<div style="margin-top:3px">'+line.join(' ')+'</div>';h+='</div>'});h+='</div>'}
+if(dy.st&&dy.st.length){h+='<div class="ps"><h3>🚉 전철역 (비상 탈출)</h3>';dy.st.forEach(s=>{h+='<div class="pc sn2"><div class="pn">'+s.n+'</div><div class="pd">'+s.ds+' · <span style="color:var(--red)">비상시 전철 귀환 가능</span></div></div>'});h+='</div>'}
+if(dy.cv&&dy.cv.length){h+='<div class="ps"><h3>🏪 편의점·보급 포인트</h3>';dy.cv.forEach(s=>{h+='<div class="pc cv"><div class="pn">'+s.n+'</div><div class="pd">'+s.ds+'</div></div>'});h+='</div>'}
+p.innerHTML=h}
+// ====== GPS ======
+function tGPS(){S.gps?stopG():startG()}
+function startG(){if(!navigator.geolocation){alert('GPS를 지원하지 않는 브라우저입니다.');return}S.gps=true;document.querySelector('.gb').classList.add('on');$('gs').classList.add('gs-on');wid=navigator.geolocation.watchPosition(pos=>{mla=pos.coords.latitude;mlo=pos.coords.longitude;updLM(mla,mlo);updEC()},err=>{$('gs').textContent='📍 GPS 오류 - 위치 권한 확인';},{enableHighAccuracy:true,timeout:15000,maximumAge:5000})}
+function stopG(){S.gps=false;if(wid){navigator.geolocation.clearWatch(wid);wid=null}document.querySelector('.gb').classList.remove('on');$('gs').classList.remove('gs-on');if(lm){map.removeLayer(lm);lm=null}}
+function updLM(la,lo){if(!map)return;if(lm)lm.setLatLng([la,lo]);else lm=L.circleMarker([la,lo],{radius:10,fillColor:'#4285f4',fillOpacity:1,color:'#fff',weight:3}).addTo(map);$('gs').textContent='📍 '+la.toFixed(4)+', '+lo.toFixed(4);let mn=Infinity,nr=null;ES.forEach(s=>{let d=hv(la,lo,s.la,s.lo);if(d<mn){mn=d;nr=s}});if(nr)$('es').textContent=nr.n+' ('+nr.l+') — 약 '+mn.toFixed(1)+'km'}
+function updEC(){if(mla&&mlo)$('ec').textContent=mla.toFixed(5)+', '+mlo.toFixed(5)}
+function hv(a,b,c,d){let R=6371,dl=(c-a)*Math.PI/180,dn=(d-b)*Math.PI/180,x=Math.sin(dl/2)**2+Math.cos(a*Math.PI/180)*Math.cos(c*Math.PI/180)*Math.sin(dn/2)**2;return R*2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x))}
+// ====== EMERGENCY ======
+function showEm(){$('em').classList.add('active');updEC();if(!S.gps&&navigator.geolocation)navigator.geolocation.getCurrentPosition(p=>{mla=p.coords.latitude;mlo=p.coords.longitude;updLM(mla,mlo);updEC()},()=>{},{enableHighAccuracy:true,timeout:10000})}
+function hideEm(){$('em').classList.remove('active')}
+// ====== GPX ======
+function dlGPX(){let d=gDays(),dy=d[S.di],g='<?xml version="1.0" encoding="UTF-8"?>\n<gpx version="1.1" creator="국토대장정가이드">\n<metadata><name>'+(S.di+1)+'일차: '+dy.t+'</name></metadata>\n';
+[...dy.w,...(dy.f||[]),...(dy.s||[]),...(dy.st||[]),...(dy.cv||[])].forEach(p=>{g+='<wpt lat="'+p.la+'" lon="'+p.lo+'"><name>'+ex(p.n)+'</name><desc>'+ex(p.ds||'')+'</desc></wpt>\n'});
+g+='<trk><name>'+(S.di+1)+'일차</name><trkseg>\n';dy.w.forEach(w=>{g+='<trkpt lat="'+w.la+'" lon="'+w.lo+'"/>\n'});g+='</trkseg></trk>\n</gpx>';
+let bl=new Blob([g],{type:'application/gpx+xml'}),u=URL.createObjectURL(bl),a=document.createElement('a');a.href=u;a.download='국토대장정_'+(S.di+1)+'일차.gpx';a.click();URL.revokeObjectURL(u)}
+function ex(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+// ====== SETTINGS ======
+function cfs(d){let c=parseInt(getComputedStyle(document.documentElement).getPropertyValue('--fs'));document.documentElement.style.setProperty('--fs',Math.max(14,Math.min(28,c+d))+'px')}
+function tdk(){document.body.classList.toggle('dark')}
+</script>
+</body>
+</html>
