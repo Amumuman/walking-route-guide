@@ -103,6 +103,41 @@ body.dark .km-tag{background:#2a2a4a;color:#aaa}body.dark .menu-tag{background:#
 body.dark .pc:active{background:#1a2a4a}
 body.dark #screen-home{background:linear-gradient(160deg,#1a2e1a 0%,#162e3e 100%)}
 body.dark .sn{color:#e8e8e8}body.dark .home-h h1,body.dark .home-h .s{color:#e8e8e8}body.dark .rc .nm{color:#e8e8e8}body.dark .rc .dt{color:#bbb}body.dark .rc .pr,body.dark .rc .cn{color:#ddd}body.dark .hf{color:#bbb}
+/* AUDIT PATCH */
+.qa-box{background:#fff7e6;border:1px solid #f0c36d;border-radius:10px;padding:10px 12px;margin:10px 0;line-height:1.6}
+.qa-box.good{background:#e8f5e9;border-color:#8bc34a}
+.qa-box.bad{background:#ffebee;border-color:#ef9a9a}
+.qa-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.qa-chip{display:inline-block;padding:4px 8px;border-radius:999px;font-size:.78rem;font-weight:700;margin:2px 4px 2px 0}
+.qa-chip.warn{background:#fff3cd;color:#8a6d3b}
+.qa-chip.bad{background:#ffebee;color:#b71c1c}
+.qa-chip.good{background:#e8f5e9;color:#1b5e20}
+.sim-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px;margin-bottom:6px}
+.sim-card .k{font-size:.8rem;color:var(--sub)}
+.sim-card .v{font-size:.95rem;font-weight:700;margin-top:2px}
+.sim-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px}
+#rm{position:absolute;top:8px;right:8px;z-index:1000;background:rgba(255,255,255,.94);padding:6px 8px;border-radius:8px;font-size:.78rem;box-shadow:0 1px 4px rgba(0,0,0,.15);display:flex;gap:6px;align-items:center}
+#rm button{background:#eee;border:1px solid #ddd;border-radius:6px;padding:6px 8px;font-size:.78rem;min-height:32px}
+#rm button.active{background:#2196f3;color:#fff;border-color:#1976d2}
+#route-note{position:absolute;left:8px;right:8px;bottom:8px;z-index:1000;background:rgba(255,255,255,.94);padding:8px 10px;border-radius:8px;font-size:.78rem;line-height:1.5;box-shadow:0 1px 4px rgba(0,0,0,.15);display:none}
+#route-note.show{display:block}
+body.dark #rm,body.dark #route-note{background:rgba(22,33,62,.94);color:var(--text)}
+body.dark .qa-box{background:#2b2416;border-color:#6d5524}
+body.dark .qa-box.good{background:#17301b;border-color:#396e41}
+body.dark .qa-box.bad{background:#381c1c;border-color:#8f3a3a}
+
+/* PATCH 2026-03-30 */
+#rm{display:none!important}
+.nav-pair{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.nav-pair .naver-btn{margin-top:0}
+.naver-btn.secondary{background:#1a73e8}
+.seg-wrap{display:grid;grid-template-columns:1fr;gap:8px;margin-top:8px}
+.seg-btn{display:flex;justify-content:space-between;align-items:center;gap:8px;width:100%;background:#f1f8e9;border:1px solid #c5e1a5;border-radius:10px;padding:10px 12px;font-size:.88rem;line-height:1.45}
+.seg-btn .arrow{color:var(--sub);font-size:.8rem;white-space:nowrap}
+body.dark .seg-btn{background:#1b2a14;border-color:#3c5f2a;color:var(--text)}
+.readiness{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.readiness .qa-chip{margin:0}
+
 </style>
 </head>
 <body>
@@ -112,7 +147,7 @@ body.dark .sn{color:#e8e8e8}body.dark .home-h h1,body.dark .home-h .s{color:#e8e
 <div class="home-b">
 <div class="rc a" onclick="selRoute('A')"><span class="bg">안전 추천</span><div class="nm">한강변 루트</div><div class="dt">약 130km · 한강공원 → 북한강자전거길</div><div class="pr"><span>✓</span> 전 구간 보행전용길 (차량분리·완전 평지)<br><span>✓</span> 편의점·화장실·지하철역 풍부<br><span>✓</span> 한강·북한강 풍경 + 방송하기 좋음</div><div class="cn"><span>✗</span> 서울 관통으로 거리 더 김<br><span>✗</span> 주말 자전거 주의</div></div>
 <div class="rc b" onclick="selRoute('B')"><span class="bg">최단거리</span><div class="nm">국도 루트</div><div class="dt">약 108~120km · 의정부 → 경춘로(46번국도)</div><div class="pr"><span>✓</span> 거리 짧음 (20~30km 절약)<br><span>✓</span> 경춘선 전철역 접근 용이<br><span>✓</span> 의정부 부대찌개 등 맛집</div><div class="cn"><span>✗</span> 1일차 사패산 고갯길<br><span>✗</span> 일부 차도 보행 (인도 좁음)<br><span>✗</span> 자동차전용도로 회피 필수 구간</div></div>
-<div class="sn"><b>팁:</b> 한강변(A)은 전 구간 평지+차량분리라 안전하고 방송하기 좋아요. 기본 20km/일이며 여유 페이스로 전환 가능.</div>
+<div class="sn"><b>팁:</b> 한강변(A)은 전 구간 평지+차량분리라 안전하고 방송하기 좋아요. <b>페이지 안 지도는 구간 요약도</b>이고, 실제 걷기는 네이버 지도로 안내를 켜고 보세요.</div>
 <div style="text-align:center;margin-top:14px"><button onclick="showHelp()" style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 24px;font-weight:600;font-size:1rem;min-height:48px">📖 사용법 보기</button></div>
 <div style="margin-top:14px;text-align:center"><div style="font-size:.85rem;color:var(--sub);margin-bottom:6px">글씨 크기 / 화면 모드</div><div class="sr"><button onclick="cfs(-2)">A-</button><button onclick="cfs(2)">A+</button><button onclick="tdk()">🌙/☀️</button></div></div>
 </div>
@@ -123,7 +158,7 @@ body.dark .sn{color:#e8e8e8}body.dark .home-h h1,body.dark .home-h .s{color:#e8e
 <div class="hdr"><button class="bk" onclick="goHome()">←</button><div class="tt"><b>사용법</b></div><div style="width:48px"></div></div>
 <div class="help-body">
 <div class="hs"><h3>기본 사용법</h3><ol><li>루트 선택 (한강변 추천)</li><li>일차 탭으로 오늘 구간 보기</li><li>지도에서 마커 탭 → 상세정보</li><li>아래 카드 탭 → 지도에서 위치 확인</li><li>📍 내 위치 → GPS로 현재 위치 표시</li></ol></div>
-<div class="hs"><h3>실제 걸을 때</h3><div class="step"><b>1. 오늘 일차 열기</b><br>→ 📍 경유지·길찾기 섹션에서<br><b style="color:#1ec800">🗺️ 오늘 전체 루트 안내 시작</b> 버튼 탭!<br><br><b>2. 네이버 지도가 열리면</b><br>→ 도보 모드로 오늘 전체 경유지가 자동 설정됨<br>→ 안내 시작하면 쭉 걸으면 됨!<br><br><b>3. 맛집/숙소 볼 때만</b><br>→ 이 가이드로 돌아와서 확인<br><br><b>일정 변경 시</b>: 경유지별 <b style="color:#1ec800">안내→</b> 버튼으로 아무 지점이나 개별 안내 가능</div></div>
+<div class="hs"><h3>실제 걸을 때</h3><div class="step"><b>1. 오늘 일차 열기</b><br>→ 📍 경유지·길찾기 섹션에서<br><b style="color:#1ec800">🗺️ 오늘 전체 루트 안내 시작</b> 버튼 탭!<br><br><b>2. 네이버 지도가 열리면</b><br>→ 도보 길찾기는 네이버 지도에서 확인<br>→ 이 페이지 안 지도는 <b>요약도</b>이고, 실제 선형이 없는 날은 선을 숨기거나 요약 연결선만 보여줘요!<br><br><b>3. 맛집/숙소 볼 때만</b><br>→ 이 가이드로 돌아와서 확인<br><br><b>일정 변경 시</b>: 경유지별 <b style="color:#1ec800">안내→</b> 버튼으로 아무 지점이나 개별 안내 가능</div></div>
 <div class="hs"><h3>알아두면 좋은 것들</h3>
 <p style="margin-bottom:8px"><b>식당·숙소·편의점 카드를 탭하면?</b><br>→ 지도가 그 위치로 이동하고 상세 정보가 뜹니다!</p>
 <p style="margin-bottom:8px"><b>마커 팝업의 <span style="color:#1ec800">네이버지도 →</span> 버튼?</b><br>→ 네이버 지도에서 해당 장소를 바로 검색합니다</p>
@@ -143,7 +178,7 @@ body.dark .sn{color:#e8e8e8}body.dark .home-h h1,body.dark .home-h .s{color:#e8e
 <div class="hdr"><button class="bk" onclick="goHome()">←</button><div class="tt"><span id="rt"></span></div><button class="sos" onclick="showEm()">SOS</button></div>
 <div id="pace-bar"><button onclick="setP('relaxed')">여유</button><button onclick="setP('standard')" class="active">기본 (20km/일)</button><button id="btn-aggressive" onclick="setP('aggressive')" style="display:none">강행 (25km+)</button></div>
 <div id="day-tabs"></div>
-<div id="mc"><div id="map"></div><div id="gs">📍 GPS 추적 중...</div><div id="map-banner" style="position:absolute;bottom:8px;left:8px;right:8px;z-index:1000;background:rgba(0,0,0,.65);color:#fff;padding:6px 10px;border-radius:6px;font-size:.72rem;text-align:center;pointer-events:none;line-height:1.5">📌 요약도입니다 · 실제 걷기는 🗺️ 안내 버튼으로 네이버 지도 사용</div></div>
+<div id="mc"><div id="map"></div><div id="gs">📍 GPS 추적 중...</div><div id="rm"><button onclick="toggleSummaryLine()">요약 연결선</button></div><div id="route-note"></div></div>
 <div id="ip"></div>
 <div id="bb"><button onclick="pDay()">◀ 이전</button><button class="gb" onclick="tGPS()">📍 내 위치</button><button onclick="nDay()">다음 ▶</button><button class="gx" onclick="startNav()" style="background:#1ec800">🗺️ 안내</button></div>
 </div>
@@ -343,8 +378,35 @@ relaxed:{lb:'여유 8일',days:[
 const ES=[{la:37.5571,lo:126.9244,n:'홍대입구역',l:'2호선'},{la:37.5940,lo:127.1340,n:'구리역',l:'경의중앙선'},{la:37.7384,lo:127.0457,n:'의정부역',l:'1호선'},{la:37.6505,lo:127.3003,n:'마석역',l:'경춘선'},{la:37.6090,lo:127.3400,n:'대성리역',l:'경춘선'},{la:37.7100,lo:127.4290,n:'청평역',l:'경춘선'},{la:37.8150,lo:127.5120,n:'가평역',l:'경춘선'},{la:37.8098,lo:127.6262,n:'강촌역',l:'경춘선'},{la:37.8710,lo:127.7180,n:'남춘천역',l:'경춘선'},{la:37.8842,lo:127.7168,n:'춘천역',l:'경춘선/ITX'}];
 
 /* =============== STATE =============== */
-let S={r:null,p:'standard',di:0,gps:false},map=null,mks=[],mf=[],ms=[],mst=[],mcv=[],rl=null,lm=null,wid=null,mla=null,mlo=null;
+let S={r:null,p:'standard',di:0,gps:false,showSummaryLine:false},map=null,mks=[],mf=[],ms=[],mst=[],mcv=[],rl=null,lm=null,wid=null,mla=null,mlo=null;
 function $(id){return document.getElementById(id)}
+
+function appnameParam(){return encodeURIComponent(location.href.split('#')[0])}
+function buildIntentUrl(nmapUrl){return 'intent://'+nmapUrl.replace(/^nmap:\/\//,'')+'#Intent;scheme=nmap;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;package=com.nhn.android.nmap;end'}
+function openNmapUrl(nmapUrl,webFallback){
+  const ua=navigator.userAgent||'';
+  try{
+    if(/Android/i.test(ua)){location.href=buildIntentUrl(nmapUrl);if(webFallback)setTimeout(()=>window.open(webFallback,'_blank'),1600);return}
+    location.href=nmapUrl;
+    if(webFallback)setTimeout(()=>window.open(webFallback,'_blank'),2200);
+  }catch(e){
+    if(webFallback)window.open(webFallback,'_blank');
+  }
+}
+function cleanName(n){return(n||'').replace(/[🚩🏁📍]/g,'').trim()}
+function nearestWaypointIndex(arr){
+  if(mla==null||mlo==null||!arr||!arr.length)return 0;
+  let best=0,bestD=Infinity;
+  arr.forEach((p,i)=>{let d=hv(mla,mlo,p.la,p.lo);if(d<bestD){bestD=d;best=i}});
+  return Math.min(best,Math.max(0,arr.length-2));
+}
+function buildWalkRouteUrl(start,mids,end){
+  let u='nmap://route/walk?';
+  if(start&&start.la!=null&&start.lo!=null)u+='slat='+start.la+'&slng='+start.lo+'&sname='+encodeURIComponent(cleanName(start.n||'현재 위치'));
+  (mids||[]).slice(0,5).forEach((p,i)=>{u+='&v'+(i+1)+'lat='+p.la+'&v'+(i+1)+'lng='+p.lo+'&v'+(i+1)+'name='+encodeURIComponent(cleanName(p.n))});
+  u+='&dlat='+end.la+'&dlng='+end.lo+'&dname='+encodeURIComponent(cleanName(end.n))+'&appname='+appnameParam();
+  return u;
+}
 
 /* =============== NAV =============== */
 function selRoute(id){S.r=id;S.p='standard';S.di=0;$('screen-home').classList.remove('active');let rs=$('screen-route');rs.classList.add('active');rs.className='screen active'+(id==='B'?' route-b':'');$('rt').textContent=R[id].nm;updP();rTabs();initMap();sDay(0)}
@@ -372,19 +434,29 @@ dy.w.forEach(w=>{let e='📍',c='#3498db';if(w.tp==='start'){e='🚩';c='#27ae60
 (dy.st||[]).forEach(s=>{let m=L.marker([s.la,s.lo],{icon:mI('🚉','#2980b9',30)}).addTo(map);m.bindPopup('<b>'+s.n+'</b><br>'+s.ds+'<br><span style="color:#c62828">비상시 전철 귀환 가능</span>'+navBtn(s.n,s.la,s.lo),{maxWidth:260});mks.push(m);mst.push(m)});
 // Convenience
 (dy.cv||[]).forEach(s=>{let m=L.marker([s.la,s.lo],{icon:mI('🏪','#27ae60',28)}).addTo(map);m.bindPopup('<b>'+s.n+'</b><br>'+s.ds+(s.km!=null?'<br><span class="km-tag">~'+s.km+'km</span>':'')+navBtn(s.n,s.la,s.lo),{maxWidth:240});mks.push(m);mcv.push(m)});
-// Line
-let lineCo=dy.path||co;
-if(lineCo.length>1)rl=L.polyline(lineCo,{color:R[S.r].c,weight:4,opacity:.7,dashArray:'10,8'}).addTo(map);
+// Line — only draw verified actual path data
+if(dy.ap&&dy.ap.length>10){
+rl=L.polyline(dy.ap.map(p=>[p.la,p.lo]),{color:R[S.r].c,weight:5,opacity:.85}).addTo(map);
+}
 // Hazard zones (Route B)
 if(dy.hz&&dy.hz.length){dy.hz.forEach(hz=>{let hzl=L.polyline(hz,{color:'#d63031',weight:7,opacity:.85,dashArray:null}).addTo(map);mks.push(hzl)})}
-let ac=[...co];(dy.f||[]).forEach(f=>ac.push([f.la,f.lo]));(dy.s||[]).forEach(s=>ac.push([s.la,s.lo]));if(ac.length>0)map.fitBounds(ac,{padding:[30,30],maxZoom:13});
+let ac=[...co];
+(dy.f||[]).forEach(f=>ac.push([f.la,f.lo]));
+(dy.s||[]).forEach(s=>ac.push([s.la,s.lo]));
+if(dy.ap&&dy.ap.length)dy.ap.forEach(p=>ac.push([p.la,p.lo]));
+else if(dy.path&&dy.path.length)dy.path.forEach(p=>ac.push([p[0],p[1]]));
+if(ac.length>0)map.fitBounds(ac,{padding:[30,30],maxZoom:13});
+dayRouteNote(dy,calcQA(dy));
 rIP(dy,idx,d.length)}
 
 /* =============== POPUP BUILDERS =============== */
 function mkPop(n,ds){return '<b style="font-size:15px">'+n+'</b>'+(ds?'<br><span style="color:#555">'+ds+'</span>':'')}
 function mkFoodPop(f){let h='<b style="font-size:15px">'+f.n+'</b>';if(f.tm)h+=' <span class="tm-tag tm-'+f.tm+'">'+f.tm+'</span>';if(f.km!=null)h+=' <span class="km-tag">~'+f.km+'km</span>';if(f.mn)h+='<br><span class="menu-tag">'+f.mn+'</span>';if(f.pr)h+='<br><b style="color:#27ae60">💰 '+f.pr+'</b>';if(f.hr)h+='<br><span class="hour-tag">⏰ '+f.hr+'</span>';if(f.cl)h+='<br><span class="closed-tag">휴무: '+f.cl+'</span>';if(f.ds)h+='<br><span style="color:#555;font-size:12px">'+f.ds+'</span>';h+=navBtn(f.n,f.la,f.lo);return h}
 function mkStayPop(s){let h='<b style="font-size:15px">'+s.n+'</b>';if(s.pr)h+='<br><b style="color:#27ae60">💰 '+s.pr+'</b>';if(s.rt)h+='<br>⭐ '+s.rt;if(s.ph)h+='<br>📞 '+s.ph;if(s.ds)h+='<br><span style="color:#555;font-size:12px">'+s.ds+'</span>';h+=navBtn(s.n,s.la,s.lo);return h}
-function navBtn(name,la,lo){return '<br><a class="naver-btn" onclick="navTo('+la+','+lo+',\''+name.replace(/'/g,"\\'")+'\');return false;" href="#">네이버지도 →</a>'}
+function navBtn(name,la,lo){
+const safe=name.replace(/'/g,"\\'");
+return '<div class="nav-pair"><a class="naver-btn" onclick="navTo('+la+','+lo+',\''+safe+'\');return false;" href="#">길안내 →</a><a class="naver-btn secondary" onclick="openPlace('+la+','+lo+',\''+safe+'\');return false;" href="#">지도열기</a></div>'
+}
 
 /* =============== focusPOI: card tap → map =============== */
 function focusPOI(type,idx){
@@ -404,6 +476,10 @@ if(dy.tip)h+='<div class="tp">💡 '+dy.tip+'</div>';if(dy.wn)h+='<div class="wn
 // Waypoints with nav buttons
 h+='<div class="ps"><h3 onclick="togSec(this)"><span class="chev">▼</span> 📍 경유지 · 길찾기</h3><div class="sb">';
 h+='<div style="margin-bottom:8px"><button onclick="startNav()" style="width:100%;padding:14px;background:#1ec800;color:#fff;border-radius:10px;font-size:1rem;font-weight:700;min-height:52px;border:none;cursor:pointer">🗺️ 오늘 전체 루트 안내 시작 (네이버 지도)</button></div>';
+h+='<div class="qa-box" style="margin:0 0 8px"><b>길 헷갈릴 때</b><br>전체 안내가 애매하면 아래에서 가장 가까운 다음 지점을 눌러 <b>현재 위치 기준</b>으로 다시 안내를 켜세요.</div>';
+h+='<div class="seg-wrap">';
+dy.w.slice(1).forEach((wp,j)=>{let label=(j===dy.w.length-2?'🏁 ':'')+cleanName(wp.n);h+='<button class="seg-btn" onclick="navTo('+wp.la+','+wp.lo+',\''+wp.n.replace(/'/g,"\\'")+'\')"><span>'+label+'</span><span class="arrow">현재 위치 기준 안내 →</span></button>'});
+h+='</div>';
 dy.w.forEach(w=>{
 h+='<div class="pc" style="border-left-color:#3498db;display:flex;align-items:center;justify-content:space-between;gap:8px"><div><b>'+w.n+'</b>'+(w.ds?' <span style="color:var(--sub);font-size:.85rem">'+w.ds+'</span>':'')+'</div>';
 if(w.tp!=='start')h+='<button onclick="event.stopPropagation();navTo('+w.la+','+w.lo+',\''+w.n.replace(/'/g,"\\'")+'\')" style="flex-shrink:0;background:#1ec800;color:#fff;padding:6px 12px;border-radius:8px;font-size:.82rem;font-weight:600;border:none;white-space:nowrap;min-height:36px">안내→</button>';
@@ -443,6 +519,54 @@ stops.forEach(s=>{
 h+='<div class="pc" style="border-left-color:'+(s.ok?'var(--green)':'var(--red)')+';padding:12px"><div class="pn">'+(s.ok?'✅':'❌')+' ~'+s.km+'km · '+s.n+'</div>';
 h+='<div class="pd" style="color:'+(s.ok?'var(--green)':'var(--red)')+'">'+s.nt+'</div></div>'});
 h+='</div></div>'}
+// QA Audit Panel
+let qa=calcQA(dy);
+h+='<div class="readiness">';
+if(qa.noActualPath)h+='<span class="qa-chip bad">실제 선형 없음</span>';
+if(qa.maxSupplyGap>=5)h+='<span class="qa-chip warn">보급 최대 간격 '+qa.maxSupplyGap+'km</span>';
+if(qa.closedToday.length)h+='<span class="qa-chip bad">오늘 휴무 '+qa.closedToday.length+'곳</span>';
+if(!qa.noActualPath&&!qa.maxSupplyGap&&!qa.closedToday.length)h+='<span class="qa-chip good">오늘 데이터 상태 양호</span>';
+h+='</div>';
+h+='<div class="ps"><h3 onclick="togSec(this)"><span class="chev">▼</span> 🔍 실제 걷기 체크</h3><div class="sb">';
+if(qa.noActualPath){
+h+='<div class="qa-box bad"><b>실제 선형 데이터 미탑재</b><br>강·하천·곡선 구간 오해를 막기 위해 요약 연결선은 숨겼습니다. 실제 걷기는 네이버 안내를 쓰세요.</div>';
+}else{
+h+='<div class="qa-box good"><b>실제 선형 데이터 있음</b><br>지도 선을 실제 선형으로 표시합니다.</div>'}
+// Distance QA
+if(qa.impossible){
+h+='<div class="qa-box bad"><b>⚠️ 거리표 이상</b><br>표기 거리 '+qa.label+'km가 시작-종점 직선거리 '+qa.straight.toFixed(1)+'km보다 짧습니다. 실제 도보 거리는 더 길 수 있어요.</div>'}
+// Long segments
+if(qa.longSegs.length){let ls=qa.longSegs.map(s=>s.from+'→'+s.to+' '+s.km.toFixed(1)+'km').join(', ');
+h+='<div class="qa-box warn"><b>긴 직선 구간</b><br>'+ls+'</div>'}
+// Chips
+h+='<div style="margin:8px 0">';
+if(qa.missingHours)h+='<span class="qa-chip warn">영업시간 누락 '+qa.missingHours+'곳</span>';
+if(qa.vague)h+='<span class="qa-chip warn">모호한 POI '+qa.vague+'곳</span>';
+if(qa.maxSupplyGap>=5)h+='<span class="qa-chip warn">보급 최대 간격 '+qa.maxSupplyGap+'km</span>';
+if(qa.closedToday.length)h+='<span class="qa-chip bad">오늘 휴무 '+qa.closedToday.length+'곳</span>';
+if(!qa.missingHours&&!qa.vague&&!qa.closedToday.length&&!qa.maxSupplyGap)h+='<span class="qa-chip good">데이터 양호</span>';
+h+='</div>';
+// Closed today details
+if(qa.closedToday.length){h+='<div class="qa-box bad" style="margin-top:4px"><b>⚠️ 오늘 휴무 식당:</b><br>'+qa.closedToday.join(', ')+'</div>'}
+// Departure time simulator
+h+='<div style="margin-top:12px"><b>🕐 출발시간별 예상</b></div>';
+h+='<div class="sim-grid">';
+[{lb:'조기 출발',hr:6.5},{lb:'보통 출발',hr:8},{lb:'늦잠 출발',hr:10}].forEach(pr=>{
+let fin=estFinishHours(dy,pr.hr);
+h+='<div class="sim-card"><div class="k">'+pr.lb+' ('+fmtHM(pr.hr)+')</div><div class="v">종료 ~'+fmtHM(fin)+'</div></div>'});
+h+='</div>';
+// Meal timing risks
+let meals=['점심','저녁'];
+let risks=meals.map(tm=>({tm:tm,r:mealRisk(dy,tm,8)})).filter(x=>x.r);
+if(risks.length){h+='<div style="margin-top:8px"><b>식사 타이밍 (08:00 출발 기준)</b></div>';
+risks.forEach(x=>{let r=x.r;
+h+='<div class="sim-card"><div class="k">첫 '+x.tm+': '+r.poi.n+'</div>';
+h+='<div class="v">도착 ~'+r.arr;
+if(r.beforeOpen)h+=' <span class="qa-chip bad">오픈 전 ('+r.open+')</span>';
+if(r.missingHours)h+=' <span class="qa-chip warn">영업시간 미확인</span>';
+if(r.closedToday)h+=' <span class="qa-chip bad">오늘 휴무!</span>';
+h+='</div></div>'})}
+h+='</div></div>';
 p.innerHTML=h}
 
 /* Section toggle */
@@ -450,6 +574,45 @@ function togSec(el){let sb=el.nextElementSibling;let ch=el.querySelector('.chev'
 
 /* Check if closed today */
 function isClosedToday(cl){if(!cl)return false;let days=['일요일','월요일','화요일','수요일','목요일','금요일','토요일'];let today=days[new Date().getDay()];return cl.includes(today)}
+
+/* =============== QA AUDIT =============== */
+function dayKmLabel(d){let m=(d.d||'').match(/(\d+)/);return m?parseInt(m[1],10):null}
+function isVaguePOI(p){let s=((p.n||'')+' '+(p.ds||'')+' '+(p.mn||'')).toLowerCase();return /부근|식당가|먹거리거리|\(다수\)|카페\/식당|아침식사|다양|중간 지점|매점|식당\/카페/.test(s)}
+function terrainSpeed(tr){if((tr||'').includes('오르막'))return 4.0;if((tr||'').includes('완만'))return 4.3;return 4.6}
+function estFinishHours(day,start){let km=dayKmLabel(day)||0,sp=terrainSpeed(day.tr),moving=km/sp,rest=Math.max(.5,km/10*.12);return start+moving+rest}
+function fmtHM(h){let hh=Math.floor(h),mm=Math.round((h-hh)*60);if(mm===60){hh++;mm=0}return String(hh).padStart(2,'0')+':'+String(mm).padStart(2,'0')}
+function parseHr(hr){if(!hr)return null;let ms=[...hr.matchAll(/(\d{1,2}):(\d{2})/g)].map(x=>parseInt(x[1],10)+parseInt(x[2],10)/60);if(!ms.length)return null;return{open:ms[0],close:ms.length>1?ms[ms.length-1]:null}}
+function calcQA(day){
+let qa={impossible:false,straight:0,label:dayKmLabel(day),missingHours:0,vague:0,longSegs:[],closedToday:[],noActualPath:!(day.ap&&day.ap.length>10),maxSupplyGap:0};
+if(day.w&&day.w.length>=2){
+qa.straight=hv(day.w[0].la,day.w[0].lo,day.w[day.w.length-1].la,day.w[day.w.length-1].lo);
+if(qa.label&&qa.label+.2<qa.straight)qa.impossible=true;
+for(let i=0;i<day.w.length-1;i++){let a=day.w[i],b=day.w[i+1],d=hv(a.la,a.lo,b.la,b.lo);if(d>8)qa.longSegs.push({from:a.n,to:b.n,km:d})}}
+(day.f||[]).forEach(f=>{if(!f.hr)qa.missingHours++;if(isVaguePOI(f))qa.vague++;if(isClosedToday(f.cl||''))qa.closedToday.push(f.n)});
+(day.s||[]).forEach(s=>{if(isVaguePOI(s))qa.vague++});
+(day.cv||[]).forEach(c=>{if(isVaguePOI(c))qa.vague++});
+let supply=(day.cv||[]).map(x=>x.km).filter(x=>typeof x==='number').sort((a,b)=>a-b);
+for(let i=0;i<supply.length-1;i++)qa.maxSupplyGap=Math.max(qa.maxSupplyGap,supply[i+1]-supply[i]);
+return qa}
+function earliestMeal(day,tm){let arr=(day.f||[]).filter(x=>x.tm===tm&&x.km!=null);if(!arr.length)return null;arr.sort((a,b)=>a.km-b.km);return arr[0]}
+function mealRisk(day,tm,startHour){
+let p=earliestMeal(day,tm);if(!p)return null;
+let arr=startHour+(p.km/terrainSpeed(day.tr))+Math.max(0,p.km/10*.12-.12);
+let hr=parseHr(p.hr||'');
+return{poi:p,arr:fmtHM(arr),beforeOpen:!!(hr&&arr<hr.open),missingHours:!p.hr,closedToday:isClosedToday(p.cl||''),open:hr?fmtHM(hr.open):''}}
+function dayRouteNote(day,qa){
+let note=$('route-note');if(!note)return;
+if(day.ap&&day.ap.length>10){note.classList.remove('show');return}
+let btn=document.querySelector('#rm button');
+if(S.showSummaryLine){
+if(btn)btn.classList.add('active');
+note.innerHTML='개발자용 요약 연결선이 켜져 있습니다. <b>실제 경로가 아니며</b> 강·하천·곡선 구간을 틀리게 보여줄 수 있습니다.';
+note.classList.add('show');
+}else{
+if(btn)btn.classList.remove('active');
+note.innerHTML='이 일차는 <b>실제 선형 데이터가 없어 지도 선을 숨겼습니다.</b> 강을 건너는 오해를 막기 위한 처리이며, 실제 걷기는 🗺️ 안내 버튼과 아래 구간별 안내를 사용하세요.';
+note.classList.add('show')}}
+function toggleSummaryLine(){S.showSummaryLine=!S.showSummaryLine;sDay(S.di)}
 
 /* =============== GPS =============== */
 function tGPS(){S.gps?stopG():startG()}
@@ -473,17 +636,28 @@ function ex(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,
 /* =============== NAVER MAP NAV =============== */
 function startNav(){
 let d=gD(),dy=d[S.di],w=dy.w;if(!w||w.length<2)return;
-let u='nmap://route/walk?slat='+w[0].la+'&slng='+w[0].lo+'&sname='+encodeURIComponent(w[0].n.replace(/[🚩🏁]/g,'').trim());
-let mid=w.slice(1,w.length-1);
-mid.forEach((p,i)=>{if(i<5){u+='&v'+(i+1)+'lat='+p.la+'&v'+(i+1)+'lng='+p.lo+'&v'+(i+1)+'name='+encodeURIComponent(p.n.replace(/[🚩🏁📍]/g,'').trim())}});
-let last=w[w.length-1];
-u+='&dlat='+last.la+'&dlng='+last.lo+'&dname='+encodeURIComponent(last.n.replace(/[🚩🏁]/g,'').trim())+'&appname=walking-guide';
-let web='https://map.naver.com/v5/directions/'+w[0].la+','+w[0].lo+','+encodeURIComponent(w[0].n)+'/'+last.la+','+last.lo+','+encodeURIComponent(last.n)+'/-/walk';
-try{location.href=u;setTimeout(()=>{window.open(web,'_blank')},2000)}catch(e){window.open(web,'_blank')}}
+let fallback='https://map.naver.com/v5/search/'+encodeURIComponent(cleanName(w[w.length-1].n));
+if(mla!=null&&mlo!=null){
+  let idx=nearestWaypointIndex(w);
+  let remaining=w.slice(Math.min(idx+1,w.length-1));
+  if(!remaining.length)remaining=[w[w.length-1]];
+  let end=remaining[remaining.length-1];
+  let mids=remaining.slice(0,-1);
+  let u=buildWalkRouteUrl({la:mla,lo:mlo,n:'현재 위치'},mids,end);
+  openNmapUrl(u,fallback);
+  return;
+}
+let u=buildWalkRouteUrl(w[0],w.slice(1,-1),w[w.length-1]);
+openNmapUrl(u,fallback)}
 function navTo(la,lo,nm){
-let u='nmap://place?lat='+la+'&lng='+lo+'&name='+encodeURIComponent(nm)+'&appname=walking-guide';
-let web='https://map.naver.com/v5/search/'+la+','+lo;
-try{location.href=u;setTimeout(()=>{window.open(web,'_blank')},2500)}catch(e){window.open(web,'_blank')}}
+let start=(mla!=null&&mlo!=null)?{la:mla,lo:mlo,n:'현재 위치'}:null;
+let u=buildWalkRouteUrl(start,[],{la:la,lo:lo,n:nm});
+let web='https://map.naver.com/v5/search/'+encodeURIComponent(nm);
+openNmapUrl(u,web)}
+function openPlace(la,lo,nm){
+let u='nmap://place?lat='+la+'&lng='+lo+'&name='+encodeURIComponent(nm)+'&appname='+appnameParam();
+let web='https://map.naver.com/v5/search/'+encodeURIComponent(nm);
+openNmapUrl(u,web)}
 
 /* Mid-route stop possibilities per day (route_pace key) */
 const MS={
@@ -566,8 +740,24 @@ list[S.di].forEach(hp=>{h+='📞 <a href="tel:'+hp.p+'" style="color:#fff;text-d
 el.innerHTML=h}
 
 /* =============== SETTINGS =============== */
-function cfs(d){let c=parseInt(getComputedStyle(document.documentElement).getPropertyValue('--fs'));document.documentElement.style.setProperty('--fs',Math.max(14,Math.min(28,c+d))+'px')}
-function tdk(){document.body.classList.toggle('dark')}
+function cfs(d){
+let c=parseInt(getComputedStyle(document.documentElement).getPropertyValue('--fs'));
+let nx=Math.max(14,Math.min(28,c+d));
+document.documentElement.style.setProperty('--fs',nx+'px');
+try{localStorage.setItem('wrg_fs',String(nx))}catch(e){}
+}
+function tdk(){
+document.body.classList.toggle('dark');
+try{localStorage.setItem('wrg_dark',document.body.classList.contains('dark')?'1':'0')}catch(e){}
+}
+(function initPrefs(){
+  try{
+    let fs=localStorage.getItem('wrg_fs');
+    let dk=localStorage.getItem('wrg_dark');
+    if(fs)document.documentElement.style.setProperty('--fs',Math.max(14,Math.min(28,parseInt(fs,10)))+'px');
+    if(dk==='1')document.body.classList.add('dark');
+  }catch(e){}
+})();
 </script>
 </body>
 </html>
