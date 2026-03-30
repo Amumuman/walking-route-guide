@@ -122,9 +122,18 @@ body.dark .pc:active{background:#1a2a4a}
 <div class="help-body">
 <div class="hs"><h3>기본 사용법</h3><ol><li>루트 선택 (한강변 추천)</li><li>일차 탭으로 오늘 구간 보기</li><li>지도에서 마커 탭 → 상세정보</li><li>아래 카드 탭 → 지도에서 위치 확인</li><li>📍 내 위치 → GPS로 현재 위치 표시</li></ol></div>
 <div class="hs"><h3>실제 걸을 때</h3><div class="step"><b>1. 오늘 일차 열기</b><br>→ 📍 경유지·길찾기 섹션에서<br><b style="color:#1ec800">🗺️ 오늘 전체 루트 안내 시작</b> 버튼 탭!<br><br><b>2. 네이버 지도가 열리면</b><br>→ 도보 모드로 오늘 전체 경유지가 자동 설정됨<br>→ 안내 시작하면 쭉 걸으면 됨!<br><br><b>3. 맛집/숙소 볼 때만</b><br>→ 이 가이드로 돌아와서 확인<br><br><b>일정 변경 시</b>: 경유지별 <b style="color:#1ec800">안내→</b> 버튼으로 아무 지점이나 개별 안내 가능</div></div>
-<div class="hs"><h3>마커 설명</h3><p>🚩 출발/도착 · 📍 경유지 · 🍽️ 식당<br>🏨 숙소 · 🏪 편의점 · 🚉 전철역(비상탈출)</p><p style="margin-top:4px"><span class="tm-tag tm-아침">아침</span> <span class="tm-tag tm-점심">점심</span> <span class="tm-tag tm-저녁">저녁</span> <span class="tm-tag tm-간식">간식</span> = 식사 시간대</p><p><span class="km-tag">~12km</span> = 출발지에서 거리</p></div>
-<div class="hs"><h3>SOS 긴급</h3><p>오른쪽 위 <b style="color:var(--red)">SOS</b> → 경찰(112)·소방(119) 원터치, 가까운 전철역, GPS 좌표</p></div>
-<div class="hs"><h3>GPX (몰라도 됨)</h3><p>GPX↓ = 루트 파일 다운로드. 트랭글/OsmAnd 같은 걷기 앱에서 사용 가능. 안 써도 전혀 문제없어요.</p></div>
+<div class="hs"><h3>알아두면 좋은 것들</h3>
+<p style="margin-bottom:8px"><b>식당·숙소·편의점 카드를 탭하면?</b><br>→ 지도가 그 위치로 이동하고 상세 정보가 뜹니다!</p>
+<p style="margin-bottom:8px"><b>마커 팝업의 <span style="color:#1ec800">네이버지도 →</span> 버튼?</b><br>→ 네이버 지도에서 해당 장소를 바로 검색합니다</p>
+<p style="margin-bottom:8px"><b>지도 위 마커 설명</b><br>🚩 출발/도착 · 📍 경유지 · 🍽️ 식당 · 🏨 숙소 · 🏪 편의점 · 🚉 전철역</p>
+<p style="margin-bottom:8px"><b>식당 태그 설명</b><br><span class="tm-tag tm-아침">아침</span> <span class="tm-tag tm-점심">점심</span> <span class="tm-tag tm-저녁">저녁</span> = 추천 시간대<br><span class="km-tag">~12km</span> = 출발지에서 거리</p>
+<p><b style="color:var(--red)">⚠️ 오늘 휴무!</b> 가 뜨면?<br>→ 그 식당이 오늘 쉬는 날이라는 뜻. 다른 곳으로!</p>
+</div>
+<div class="hs"><h3>일정이 바뀔 때</h3>
+<p>더 걷거나 덜 걸을 수 있으니까:<br>
+→ 경유지 옆 <b style="color:#1ec800">안내→</b> 버튼으로 아무 지점이나 개별 안내 가능<br>
+→ 🛏️ <b>일정 변경 시</b> 섹션에서 중간에 잘 수 있는 곳 (✅) / 없는 곳 (❌) 확인</p></div>
+<div class="hs"><h3>SOS 긴급</h3><p>오른쪽 위 <b style="color:var(--red)">SOS</b> → 경찰(112)·소방(119) 원터치, 가까운 전철역, 현재 일차 근처 병원, GPS 좌표</p></div>
 <div class="hs"><h3>배터리 팁</h3><p><b>보조배터리 20,000mAh 이상 필수!</b> 화면 밝기 낮추기. GPS 필요 없을 때 끄기.</p></div>
 </div></div>
 <!-- ROUTE -->
@@ -138,7 +147,7 @@ body.dark .pc:active{background:#1a2a4a}
 </div>
 <!-- EMERGENCY -->
 <div id="em"><h2>긴급 연락</h2><a href="tel:112" class="eb e1">📞 경찰 112</a><a href="tel:119" class="eb e2">🚑 소방/응급 119</a>
-<div class="ei"><b>가까운 전철역:</b> <span id="es">위치 확인 중...</span><br><b>내 좌표:</b> <span id="ec">GPS 켜주세요</span><br><b>코레일:</b> 1544-7788<br><b>가평군보건의료원:</b> 031-580-2800<br><b>강원대학교병원:</b> 033-258-2000</div>
+<div class="ei"><b>가까운 전철역:</b> <span id="es">위치 확인 중...</span><br><b>내 좌표:</b> <span id="ec">GPS 켜주세요</span><br><b>코레일:</b> 1544-7788<br><span id="em-hosp"></span></div>
 <button class="ec" onclick="hideEm()">✕ 닫기</button></div>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
@@ -403,7 +412,7 @@ function updEC(){if(mla&&mlo)$('ec').textContent=mla.toFixed(5)+', '+mlo.toFixed
 function hv(a,b,c,d){let R=6371,dl=(c-a)*Math.PI/180,dn=(d-b)*Math.PI/180,x=Math.sin(dl/2)**2+Math.cos(a*Math.PI/180)*Math.cos(c*Math.PI/180)*Math.sin(dn/2)**2;return R*2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x))}
 
 /* =============== EMERGENCY =============== */
-function showEm(){$('em').classList.add('active');updEC();if(!S.gps&&navigator.geolocation)navigator.geolocation.getCurrentPosition(p=>{mla=p.coords.latitude;mlo=p.coords.longitude;updLM(mla,mlo);updEC()},()=>{},{enableHighAccuracy:true,timeout:10000})}
+function showEm(){$('em').classList.add('active');updEC();updHosp();if(!S.gps&&navigator.geolocation)navigator.geolocation.getCurrentPosition(p=>{mla=p.coords.latitude;mlo=p.coords.longitude;updLM(mla,mlo);updEC()},()=>{},{enableHighAccuracy:true,timeout:10000})}
 function hideEm(){$('em').classList.remove('active')}
 
 /* =============== GPX =============== */
@@ -447,6 +456,52 @@ const MS={
 [{km:3,n:'남이섬',ok:false,nt:'숙소 없음'},{km:8,n:'중간',ok:false,nt:'숙소 없음'}],
 [{km:8,n:'의암댐',ok:false,nt:'숙소 없음'},{km:12,n:'춘천역',ok:true,nt:'춘천 모텔 다수'}]
 ]};
+
+/* =============== EMERGENCY HOSPITALS (by day) =============== */
+const HOSP={
+'A_standard':[
+[{n:'명지병원 응급실',p:'031-810-5114',a:'고양시'},{n:'일산백병원',p:'031-910-7114',a:'일산'}],
+[{n:'세브란스 응급실',p:'02-2228-8888',a:'서울 서대문구'},{n:'이대서울병원',p:'02-6986-1000',a:'서울 마포구'}],
+[{n:'한양대구리병원',p:'031-560-2114',a:'구리시'}],
+[{n:'한양대구리병원',p:'031-560-2114',a:'구리시'},{n:'남양주보건소',p:'031-590-4600',a:'남양주'}],
+[{n:'가평군보건의료원',p:'031-580-2800',a:'가평군'}],
+[{n:'가평군보건의료원',p:'031-580-2800',a:'가평군'}],
+[{n:'강원대학교병원',p:'033-258-2000',a:'춘천시'},{n:'춘천성심병원',p:'033-240-5000',a:'춘천시'}]
+],
+'A_relaxed':[
+[{n:'명지병원 응급실',p:'031-810-5114',a:'고양시'}],
+[{n:'세브란스 응급실',p:'02-2228-8888',a:'서울'}],
+[{n:'한양대구리병원',p:'031-560-2114',a:'구리시'}],
+[{n:'한양대구리병원',p:'031-560-2114',a:'구리시'}],
+[{n:'남양주보건소',p:'031-590-4600',a:'남양주'}],
+[{n:'가평군보건의료원',p:'031-580-2800',a:'가평군'}],
+[{n:'가평군보건의료원',p:'031-580-2800',a:'가평군'}],
+[{n:'가평군보건의료원',p:'031-580-2800',a:'가평군'}],
+[{n:'강원대학교병원',p:'033-258-2000',a:'춘천시'}]
+],
+'B_relaxed':[
+[{n:'명지병원 응급실',p:'031-810-5114',a:'고양시'}],
+[{n:'의정부을지대병원',p:'031-951-3030',a:'의정부'}],
+[{n:'의정부을지대병원',p:'031-951-3030',a:'의정부'}],
+[{n:'남양주보건소',p:'031-590-4600',a:'남양주'}],
+[{n:'가평군보건의료원',p:'031-580-2800',a:'가평군'}],
+[{n:'가평군보건의료원',p:'031-580-2800',a:'가평군'}],
+[{n:'가평군보건의료원',p:'031-580-2800',a:'가평군'}],
+[{n:'강원대학교병원',p:'033-258-2000',a:'춘천시'}]
+],
+'B_standard':[
+[{n:'명지병원 응급실',p:'031-810-5114',a:'고양시'},{n:'의정부을지대병원',p:'031-951-3030',a:'의정부'}],
+[{n:'의정부을지대병원',p:'031-951-3030',a:'의정부'},{n:'남양주보건소',p:'031-590-4600',a:'남양주'}],
+[{n:'가평군보건의료원',p:'031-580-2800',a:'가평군'}],
+[{n:'가평군보건의료원',p:'031-580-2800',a:'가평군'}],
+[{n:'가평군보건의료원',p:'031-580-2800',a:'가평군'}],
+[{n:'강원대학교병원',p:'033-258-2000',a:'춘천시'},{n:'춘천성심병원',p:'033-240-5000',a:'춘천시'}]
+]};
+function updHosp(){let el=$('em-hosp');if(!el)return;if(!S.r){el.innerHTML='<b>근처 병원:</b> 루트를 먼저 선택하세요';return}
+let key=S.r+'_'+S.p,list=HOSP[key];if(!list||!list[S.di]){el.innerHTML='';return}
+let h='<b>근처 병원 ('+( S.di+1)+'일차 기준):</b><br>';
+list[S.di].forEach(hp=>{h+='📞 <a href="tel:'+hp.p+'" style="color:#fff;text-decoration:underline">'+hp.n+' '+hp.p+'</a> ('+hp.a+')<br>'});
+el.innerHTML=h}
 
 /* =============== SETTINGS =============== */
 function cfs(d){let c=parseInt(getComputedStyle(document.documentElement).getPropertyValue('--fs'));document.documentElement.style.setProperty('--fs',Math.max(14,Math.min(28,c+d))+'px')}
