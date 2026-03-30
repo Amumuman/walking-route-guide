@@ -90,6 +90,7 @@ h1{font-size:1.3rem;font-weight:700}h2{font-size:1.1rem;font-weight:700}h3{font-
 .hs ol,.hs ul{padding-left:20px}
 .hs .step{background:#e3f2fd;padding:8px 12px;border-radius:8px;margin:6px 0;font-size:.88rem;line-height:1.6}
 /* LEAFLET POPUP */
+.nav-start-btn{width:100%;padding:14px;background:#1ec800;color:#fff;border-radius:10px;font-size:1rem;font-weight:700;min-height:52px;border:none;cursor:pointer}.nav-start-btn:active{opacity:.85}
 .leaflet-popup-content{font-size:14px!important;line-height:1.6!important;max-width:280px}
 .leaflet-popup-content b{font-size:15px}
 /* DARK */
@@ -120,7 +121,7 @@ body.dark .pc:active{background:#1a2a4a}
 <div class="hdr"><button class="bk" onclick="goHome()">←</button><div class="tt"><b>사용법</b></div><div style="width:48px"></div></div>
 <div class="help-body">
 <div class="hs"><h3>기본 사용법</h3><ol><li>루트 선택 (한강변 추천)</li><li>일차 탭으로 오늘 구간 보기</li><li>지도에서 마커 탭 → 상세정보</li><li>아래 카드 탭 → 지도에서 위치 확인</li><li>📍 내 위치 → GPS로 현재 위치 표시</li></ol></div>
-<div class="hs"><h3>실제 걸을 때</h3><div class="step">이 가이드 = 맛집·숙소·안전정보 확인용<br><b>네이버 지도 = 실제 도보 내비</b><br><br>카드에 있는 <b style="color:#1ec800">네이버지도</b> 버튼을 누르면 바로 열립니다!<br>도보 길찾기로 다음 경유지까지 안내받으세요.</div></div>
+<div class="hs"><h3>실제 걸을 때</h3><div class="step"><b>1. 오늘 일차 열기</b><br>→ 📍 경유지·길찾기 섹션에서<br><b style="color:#1ec800">🗺️ 오늘 전체 루트 안내 시작</b> 버튼 탭!<br><br><b>2. 네이버 지도가 열리면</b><br>→ 도보 모드로 오늘 전체 경유지가 자동 설정됨<br>→ 안내 시작하면 쭉 걸으면 됨!<br><br><b>3. 맛집/숙소 볼 때만</b><br>→ 이 가이드로 돌아와서 확인<br><br><b>일정 변경 시</b>: 경유지별 <b style="color:#1ec800">안내→</b> 버튼으로 아무 지점이나 개별 안내 가능</div></div>
 <div class="hs"><h3>마커 설명</h3><p>🚩 출발/도착 · 📍 경유지 · 🍽️ 식당<br>🏨 숙소 · 🏪 편의점 · 🚉 전철역(비상탈출)</p><p style="margin-top:4px"><span class="tm-tag tm-아침">아침</span> <span class="tm-tag tm-점심">점심</span> <span class="tm-tag tm-저녁">저녁</span> <span class="tm-tag tm-간식">간식</span> = 식사 시간대</p><p><span class="km-tag">~12km</span> = 출발지에서 거리</p></div>
 <div class="hs"><h3>SOS 긴급</h3><p>오른쪽 위 <b style="color:var(--red)">SOS</b> → 경찰(112)·소방(119) 원터치, 가까운 전철역, GPS 좌표</p></div>
 <div class="hs"><h3>GPX (몰라도 됨)</h3><p>GPX↓ = 루트 파일 다운로드. 트랭글/OsmAnd 같은 걷기 앱에서 사용 가능. 안 써도 전혀 문제없어요.</p></div>
@@ -133,7 +134,7 @@ body.dark .pc:active{background:#1a2a4a}
 <div id="day-tabs"></div>
 <div id="mc"><div id="map"></div><div id="gs">📍 GPS 추적 중...</div></div>
 <div id="ip"></div>
-<div id="bb"><button onclick="pDay()">◀ 이전</button><button class="gb" onclick="tGPS()">📍 내 위치</button><button onclick="nDay()">다음 ▶</button><button class="gx" onclick="dlGPX()">GPX↓</button></div>
+<div id="bb"><button onclick="pDay()">◀ 이전</button><button class="gb" onclick="tGPS()">📍 내 위치</button><button onclick="nDay()">다음 ▶</button><button class="gx" onclick="startNav()" style="background:#1ec800">🗺️ 안내</button></div>
 </div>
 <!-- EMERGENCY -->
 <div id="em"><h2>긴급 연락</h2><a href="tel:112" class="eb e1">📞 경찰 112</a><a href="tel:119" class="eb e2">🚑 소방/응급 119</a>
@@ -343,6 +344,14 @@ function rIP(dy,idx,tot){
 let p=$('ip'),ss='★'.repeat(dy.sf)+'☆'.repeat(5-dy.sf);
 let h='<div class="dh"><h2>'+(idx+1)+'일차: '+dy.t+'</h2><div class="st"><span>📏 '+dy.d+'</span><span>⛰️ '+dy.tr+'</span><span class="sf">안전 '+ss+'</span></div>';
 if(dy.tip)h+='<div class="tp">💡 '+dy.tip+'</div>';if(dy.wn)h+='<div class="wn">⚠️ '+dy.wn+'</div>';h+='</div>';
+// Waypoints with nav buttons
+h+='<div class="ps"><h3 onclick="togSec(this)"><span class="chev">▼</span> 📍 경유지 · 길찾기</h3><div class="sb">';
+h+='<div style="margin-bottom:8px"><button onclick="startNav()" style="width:100%;padding:14px;background:#1ec800;color:#fff;border-radius:10px;font-size:1rem;font-weight:700;min-height:52px;border:none;cursor:pointer">🗺️ 오늘 전체 루트 안내 시작 (네이버 지도)</button></div>';
+dy.w.forEach(w=>{
+h+='<div class="pc" style="border-left-color:#3498db;display:flex;align-items:center;justify-content:space-between;gap:8px"><div><b>'+w.n+'</b>'+(w.ds?' <span style="color:var(--sub);font-size:.85rem">'+w.ds+'</span>':'')+'</div>';
+if(w.tp!=='start')h+='<button onclick="event.stopPropagation();navTo('+w.la+','+w.lo+',\''+w.n.replace(/'/g,"\\'")+'\')" style="flex-shrink:0;background:#1ec800;color:#fff;padding:6px 12px;border-radius:8px;font-size:.82rem;font-weight:600;border:none;white-space:nowrap;min-height:36px">안내→</button>';
+h+='</div>'});
+h+='</div></div>';
 // Food by timing
 if(dy.f&&dy.f.length){
 let groups={};dy.f.forEach((f,i)=>{let t=f.tm||'기타';if(!groups[t])groups[t]=[];groups[t].push({...f,_i:i})});
@@ -368,6 +377,15 @@ dy.st.forEach((s,i)=>{h+='<div class="pc sn2" onclick="focusPOI(\'st\','+i+')"><
 // Convenience
 if(dy.cv&&dy.cv.length){h+='<div class="ps"><h3 onclick="togSec(this)"><span class="chev">▼</span> 🏪 편의점·보급 ('+dy.cv.length+'곳)</h3><div class="sb">';
 dy.cv.forEach((s,i)=>{h+='<div class="pc cv" onclick="focusPOI(\'cv\','+i+')"><div class="pn">'+s.n+(s.km!=null?' <span class="km-tag">~'+s.km+'km</span>':'')+'</div><div class="pd">'+s.ds+'</div></div>'});h+='</div></div>'}
+// Mid-route stops
+let msKey=S.r+'_'+S.p;
+if(MS[msKey]&&MS[msKey][idx]){let stops=MS[msKey][idx];
+h+='<div class="ps"><h3 onclick="togSec(this)"><span class="chev closed">▼</span> 🛏️ 일정 변경 시 (중간 숙소)</h3><div class="sb closed">';
+h+='<div style="font-size:.85rem;color:var(--sub);margin-bottom:8px;line-height:1.6">컨디션에 따라 일정을 줄이거나 늘릴 때 참고하세요</div>';
+stops.forEach(s=>{
+h+='<div class="pc" style="border-left-color:'+(s.ok?'var(--green)':'var(--red)')+';padding:12px"><div class="pn">'+(s.ok?'✅':'❌')+' ~'+s.km+'km · '+s.n+'</div>';
+h+='<div class="pd" style="color:'+(s.ok?'var(--green)':'var(--red)')+'">'+s.nt+'</div></div>'});
+h+='</div></div>'}
 p.innerHTML=h}
 
 /* Section toggle */
@@ -394,6 +412,41 @@ function dlGPX(){let d=gD(),dy=d[S.di],g='<?xml version="1.0" encoding="UTF-8"?>
 g+='<trk><name>'+(S.di+1)+'일차</name><trkseg>\n';dy.w.forEach(w=>{g+='<trkpt lat="'+w.la+'" lon="'+w.lo+'"/>\n'});g+='</trkseg></trk>\n</gpx>';
 let bl=new Blob([g],{type:'application/gpx+xml'}),u=URL.createObjectURL(bl),a=document.createElement('a');a.href=u;a.download='국토대장정_'+(S.di+1)+'일차.gpx';a.click();URL.revokeObjectURL(u)}
 function ex(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+
+/* =============== NAVER MAP NAV =============== */
+function startNav(){
+let d=gD(),dy=d[S.di],w=dy.w;if(!w||w.length<2)return;
+let u='nmap://route/walk?slat='+w[0].la+'&slng='+w[0].lo+'&sname='+encodeURIComponent(w[0].n.replace(/[🚩🏁]/g,'').trim());
+let mid=w.slice(1,w.length-1);
+mid.forEach((p,i)=>{if(i<5){u+='&v'+(i+1)+'lat='+p.la+'&v'+(i+1)+'lng='+p.lo+'&v'+(i+1)+'name='+encodeURIComponent(p.n)}});
+let last=w[w.length-1];
+u+='&dlat='+last.la+'&dlng='+last.lo+'&dname='+encodeURIComponent(last.n.replace(/[🚩🏁]/g,'').trim())+'&appname=walking-guide';
+let web='https://map.naver.com/v5/directions/'+w[0].la+','+w[0].lo+','+encodeURIComponent(w[0].n)+'/'+last.la+','+last.lo+','+encodeURIComponent(last.n)+'/-/walk';
+try{location.href=u;setTimeout(()=>{window.open(web,'_blank')},2000)}catch(e){window.open(web,'_blank')}}
+function navTo(la,lo,nm){
+let u='nmap://route/walk?dlat='+la+'&dlng='+lo+'&dname='+encodeURIComponent(nm)+'&appname=walking-guide';
+let web='https://map.naver.com/search/'+encodeURIComponent(nm);
+try{location.href=u;setTimeout(()=>{window.open(web,'_blank')},2000)}catch(e){window.open(web,'_blank')}}
+
+/* Mid-route stop possibilities per day (route_pace key) */
+const MS={
+'A_standard':[
+[{km:15,n:'난지/마포',ok:true,nt:'합정·마포 모텔 다수 (도보10분)'},{km:12,n:'행주산성 부근',ok:false,nt:'숙소 없음 → 난지(15km)까지 가야 함'}],
+[{km:8,n:'이촌/용산',ok:true,nt:'용산역 부근 모텔'},{km:14,n:'뚝섬/성수',ok:true,nt:'성수동 모텔 다수'},{km:18,n:'광나루/천호',ok:true,nt:'천호동 모텔 도보 5분'}],
+[{km:5,n:'다산신도시',ok:true,nt:'저스트슬립호텔 등'},{km:12,n:'팔당역',ok:false,nt:'숙소 매우 적음! 양수(16km)까지 가야 함'}],
+[{km:3,n:'밝은광장',ok:false,nt:'숙소 없음'},{km:12,n:'대성리역',ok:true,nt:'이틀모텔 49,000원~'},{km:18,n:'청평 입구',ok:true,nt:'청평 숙소 다수'}],
+[{km:10,n:'설악면',ok:false,nt:'숙소 거의 없음 → 가평(15km)까지'}],
+[{km:3,n:'남이섬 입구',ok:false,nt:'숙소 적음'},{km:8,n:'중간 지점',ok:false,nt:'숙소 없음 → 강촌(13km)까지'}],
+[{km:8,n:'의암댐',ok:false,nt:'숙소 없음'},{km:12,n:'춘천역',ok:true,nt:'춘천 시내 모텔·호텔 다수'}]
+],
+'B_standard':[
+[{km:13,n:'벽제',ok:false,nt:'숙소 없음 → 의정부(20km)까지'},{km:17,n:'송추',ok:true,nt:'송추 펜션/모텔'}],
+[{km:8,n:'별내',ok:true,nt:'별내 모텔'},{km:12,n:'퇴계원',ok:true,nt:'퇴계원 모텔'}],
+[{km:8,n:'대성리역',ok:true,nt:'이틀모텔 49,000원~'}],
+[{km:10,n:'설악면',ok:false,nt:'숙소 없음 → 가평(18km)까지'}],
+[{km:3,n:'남이섬',ok:false,nt:'숙소 없음'},{km:8,n:'중간',ok:false,nt:'숙소 없음'}],
+[{km:8,n:'의암댐',ok:false,nt:'숙소 없음'},{km:12,n:'춘천역',ok:true,nt:'춘천 모텔 다수'}]
+]};
 
 /* =============== SETTINGS =============== */
 function cfs(d){let c=parseInt(getComputedStyle(document.documentElement).getPropertyValue('--fs'));document.documentElement.style.setProperty('--fs',Math.max(14,Math.min(28,c+d))+'px')}
