@@ -310,16 +310,12 @@ function parseViewHash(){
   return {r,p,d};
 }
 function restoreViewState(){
-  let v=null;
-  try{ let raw=localStorage.getItem('wrg_view'); if(raw) v=JSON.parse(raw); }catch(e){}
   let h=parseViewHash();
-  let pick=h||v;
-  if(!pick||!pick.r||!R[pick.r]) return;
-  selRoute(pick.r);
-  if(pick.p && R[pick.r].paces[pick.p]) setP(pick.p);
-  let di=Number.isInteger(pick.d)?pick.d:0;
+  if(!h||!h.r||!R[h.r]) return;
+  selRoute(h.r);
+  if(h.p && R[h.r].paces[h.p]) setP(h.p);
+  let di=Number.isInteger(h.d)?h.d:0;
   if(di>=0 && di<gD().length) sDay(di);
-  if(v && typeof v.collapsed==='boolean'){ S.collapsed=v.collapsed; applyScreenState(); }
 }
 
 
