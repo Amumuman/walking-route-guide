@@ -414,16 +414,27 @@ let S={r:null,p:'standard',di:0,gps:false,showSummaryLine:false,collapsed:false,
 function $(id){return document.getElementById(id)}
 
 function appnameParam(){return encodeURIComponent(location.href.split('#')[0])}
-function buildIntentUrl(nmapUrl){return 'intent://'+nmapUrl.replace(/^nmap:\/\//,'')+'#Intent;scheme=nmap;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;package=com.nhn.android.nmap;end'}
 function openNmapUrl(nmapUrl,webFallback){
   const ua=navigator.userAgent||'';
   try{
-    if(/Android/i.test(ua)){location.href=buildIntentUrl(nmapUrl);if(webFallback)setTimeout(()=>window.open(webFallback,'_blank'),1600);return}
+    if(/Android/i.test(ua)){location.href=buildIntentUrl(nmapUrl,webFallback);return}
+    if(/iPhone|iPad|iPod/i.test(ua)){
+      const fb=webFallback;
+      const t=setTimeout(()=>{if(!document.hidden&&fb)location.href=fb},1400);
+      const c=()=>{clearTimeout(t);document.removeEventListener('visibilitychange',c)};
+      document.addEventListener('visibilitychange',c);
+      location.href=nmapUrl;return;
+    }
+    if(webFallback){window.open(webFallback,'_blank');return}
     location.href=nmapUrl;
-    if(webFallback)setTimeout(()=>window.open(webFallback,'_blank'),2200);
   }catch(e){
     if(webFallback)window.open(webFallback,'_blank');
   }
+}
+function buildIntentUrl(nmapUrl,fallbackUrl){
+  let u='intent://'+nmapUrl.replace(/^nmap:\/\//,'')+'#Intent;scheme=nmap;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;package=com.nhn.android.nmap;';
+  if(fallbackUrl)u+='S.browser_fallback_url='+encodeURIComponent(fallbackUrl)+';';
+  u+='end';return u;
 }
 
 const DEBUG_MAP = /(?:^|[?&])debug=1(?:&|$)/.test(location.search);
@@ -903,9 +914,12 @@ let bl=new Blob([g],{type:'application/gpx+xml'}),u=URL.createObjectURL(bl),a=do
 function ex(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 
 /* =============== NAVER MAP NAV =============== */
+function webDirUrl(s,e){return 'https://map.naver.com/v5/directions/'+s.la+','+s.lo+','+encodeURIComponent(cleanName(s.n))+',/'+e.la+','+e.lo+','+encodeURIComponent(cleanName(e.n))+',/-/walk'}
+function webPlaceUrl(la,lo,nm){return 'https://map.naver.com/v5/search/'+encodeURIComponent(nm)+'?c='+lo+','+la+',15,0,0,0,dh'}
 function startNav(){
 let d=gD(),dy=d[S.di],w=dy.w;if(!w||w.length<2)return;
-let fallback='https://map.naver.com/v5/search/'+encodeURIComponent(cleanName(w[w.length-1].n));
+let first=w[0],last=w[w.length-1];
+let fallback=webDirUrl(first,last);
 if(mla!=null&&mlo!=null){
   let info=nearestWaypointInfo(w);
   let cursor=info.index;
@@ -915,10 +929,11 @@ if(mla!=null&&mlo!=null){
   let end=remaining[remaining.length-1];
   let mids=remaining.slice(0,-1);
   let u=buildWalkRouteUrl({la:mla,lo:mlo,n:'현재 위치'},mids,end);
+  fallback=webDirUrl({la:mla,lo:mlo,n:'현재 위치'},end);
   openNmapUrl(u,fallback);
   return;
 }
-let u=buildWalkRouteUrl(w[0],w.slice(1,-1),w[w.length-1]);
+let u=buildWalkRouteUrl(w[0],w.slice(1,-1),last);
 openNmapUrl(u,fallback)}
 function navTo(la,lo,nm){
 let start=(mla!=null&&mlo!=null)?{la:mla,lo:mlo,n:'현재 위치'}:null;
@@ -926,12 +941,13 @@ if(!start){
   let day=gD()[S.di];
   if(day&&day.w&&day.w.length)start={la:day.w[0].la,lo:day.w[0].lo,n:cleanName(day.w[0].n)};
 }
-let u=buildWalkRouteUrl(start,[],{la:la,lo:lo,n:nm});
-let web='https://map.naver.com/v5/search/'+encodeURIComponent(nm);
+let dest={la:la,lo:lo,n:nm};
+let u=buildWalkRouteUrl(start,[],dest);
+let web=start?webDirUrl(start,dest):webPlaceUrl(la,lo,nm);
 openNmapUrl(u,web)}
 function openPlace(la,lo,nm){
 let u='nmap://place?lat='+la+'&lng='+lo+'&name='+encodeURIComponent(nm)+'&appname='+appnameParam();
-let web='https://map.naver.com/v5/search/'+encodeURIComponent(nm);
+let web=webPlaceUrl(la,lo,nm);
 openNmapUrl(u,web)}
 
 /* Mid-route stop possibilities per day (route_pace key) */
