@@ -132,8 +132,6 @@ body.dark .qa-box.bad{background:#381c1c;border-color:#8f3a3a}
 #rm{display:flex;gap:6px;flex-wrap:wrap;max-width:min(78vw,260px)}
 #rm .tool-btn{background:#fff;border:1px solid #ddd;border-radius:8px;padding:6px 10px;font-size:.78rem;min-height:36px;font-weight:700;box-shadow:0 1px 3px rgba(0,0,0,.08)}
 #rm .tool-btn.active{background:#1a73e8;color:#fff;border-color:#1a73e8}
-#rm .tool-btn.live{background:#fff3cd;border-color:#f0c36d;color:#7a5400}
-#rm .tool-btn.live.active{background:#ff9800;color:#fff;border-color:#ff9800}
 .nav-pair{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
 .nav-pair .naver-btn{margin-top:0}
 .naver-btn{min-height:44px;line-height:34px;font-size:.82rem;padding:4px 12px}
@@ -165,9 +163,7 @@ body.dark .seg-btn{background:#1b2a14;border-color:#3c5f2a;color:var(--text)}
 .em-searches button{background:rgba(255,255,255,.16);color:#fff;border:1px solid rgba(255,255,255,.16);border-radius:10px;padding:10px 8px;min-height:44px;font-size:.85rem;font-weight:700}
 body.dark #rm .tool-btn{background:#2a2a4a;border-color:#445;color:var(--text)}
 body.dark #rm .tool-btn.active{background:#1a73e8;color:#fff;border-color:#1a73e8}
-body.dark #rm .tool-btn.live{background:#4b3200;border-color:#8a6d3b;color:#ffd180}
-body.dark #rm .tool-btn.live.active{background:#ff9800;color:#fff;border-color:#ff9800}
-body.dark .live-box,body.dark .live-hud,body.dark .live-actions button,body.dark .time-pills button{background:#1a2a4a}
+body.dark body.dark body.dark .live-box,body.dark .live-hud,body.dark .live-actions button,body.dark .time-pills button{background:#1a2a4a}
 body.dark .live-actions button.primary{background:#1a73e8}
 body.dark .em-searches button{background:rgba(255,255,255,.10)}
 
@@ -204,14 +200,14 @@ body.dark .em-searches button{background:rgba(255,255,255,.10)}
 → 경유지 옆 <b style="color:#1ec800">안내→</b> 버튼으로 아무 지점이나 개별 안내 가능<br>
 → 🛏️ <b>일정 변경 시</b> 섹션에서 중간에 잘 수 있는 곳 (✅) / 없는 곳 (❌) 확인</p></div>
 <div class="hs"><h3>SOS 긴급</h3><p>오른쪽 위 <b style="color:var(--red)">SOS</b> → 경찰(112)·소방(119) 원터치, 가까운 전철역, 루트 기준 병원, 주변 응급실/약국/편의점 검색, GPS 좌표</p></div>
-<div class="hs"><h3>배터리 팁</h3><p><b>보조배터리 20,000mAh 이상 필수!</b> 화면 밝기 낮추기. GPS 필요 없을 때 끄기. 방송할 땐 <b>방송 모드</b>와 <b>화면 안꺼짐</b>을 함께 켜면 실수 줄이기 좋아요.</p></div>
+<div class="hs"><h3>배터리 팁</h3><p><b>보조배터리 20,000mAh 이상 필수!</b> 화면 밝기 낮추기. GPS 필요 없을 때 끄기. 네이버 지도 안내 중엔 네이버가 알아서 화면을 유지해줘요.</p></div>
 </div></div>
 <!-- ROUTE -->
 <div id="screen-route" class="screen">
 <div class="hdr"><button class="bk" onclick="goHome()">←</button><div class="tt"><span id="rt"></span></div><button class="sos" onclick="showEm()">SOS</button></div>
 <div id="pace-bar"><button onclick="setP('relaxed')">여유</button><button onclick="setP('standard')" class="active">기본 (20km/일)</button><button id="btn-aggressive" onclick="setP('aggressive')" style="display:none">강행 (25km+)</button></div>
 <div id="day-tabs"></div>
-<div id="mc"><div id="map"></div><div id="gs">📍 GPS 추적 중...</div><div id="rm"><button id="btn-summary" class="tool-btn" onclick="toggleSummaryLine()" style="display:none">요약 연결선</button><button id="btn-collapse" class="tool-btn" onclick="toggleCollapse()">지도 크게</button><button id="btn-live" class="tool-btn live" onclick="toggleLiveMode()">방송 모드</button><button id="btn-wake" class="tool-btn" onclick="toggleWake()">화면 안꺼짐</button></div><div id="route-note"></div></div>
+<div id="mc"><div id="map"></div><div id="gs">📍 GPS 추적 중...</div><div id="rm"><button id="btn-summary" class="tool-btn" onclick="toggleSummaryLine()" style="display:none">요약 연결선</button><button id="btn-collapse" class="tool-btn" onclick="toggleCollapse()">지도 크게</button></div><div id="route-note"></div></div>
 <div id="ip"></div>
 <div id="bb"><button onclick="pDay()">◀ 이전</button><button class="gb" onclick="tGPS()">📍 내 위치</button><button onclick="nDay()">다음 ▶</button><button class="gx" onclick="startNav()" style="background:#1ec800">🗺️ 안내</button></div>
 </div>
@@ -412,7 +408,7 @@ relaxed:{lb:'여유 8일',days:[
 const ES=[{la:37.5571,lo:126.9244,n:'홍대입구역',l:'2호선'},{la:37.5940,lo:127.1340,n:'구리역',l:'경의중앙선'},{la:37.7384,lo:127.0457,n:'의정부역',l:'1호선'},{la:37.6505,lo:127.3003,n:'마석역',l:'경춘선'},{la:37.6090,lo:127.3400,n:'대성리역',l:'경춘선'},{la:37.7100,lo:127.4290,n:'청평역',l:'경춘선'},{la:37.8150,lo:127.5120,n:'가평역',l:'경춘선'},{la:37.8098,lo:127.6262,n:'강촌역',l:'경춘선'},{la:37.8710,lo:127.7180,n:'남춘천역',l:'경춘선'},{la:37.8842,lo:127.7168,n:'춘천역',l:'경춘선/ITX'}];
 
 /* =============== STATE =============== */
-let S={r:null,p:'standard',di:0,gps:false,showSummaryLine:false,collapsed:false,live:false,startHr:8,wake:false},map=null,mks=[],mf=[],ms=[],mst=[],mcv=[],rl=null,lm=null,wid=null,mla=null,mlo=null,wakeSentinel=null;
+let S={r:null,p:'standard',di:0,gps:false,showSummaryLine:false,collapsed:false,startHr:8},map=null,mks=[],mf=[],ms=[],mst=[],mcv=[],rl=null,lm=null,wid=null,mla=null,mlo=null;
 function $(id){return document.getElementById(id)}
 
 function appnameParam(){return encodeURIComponent(location.href.split('#')[0])}
@@ -445,36 +441,14 @@ function buildWalkRouteUrl(start,mids,end){
 function applyScreenState(){
   let rs=$('screen-route'); if(!rs)return;
   rs.classList.toggle('collapsed',!!S.collapsed);
-  rs.classList.toggle('live-route',!!S.live);
   updateMapTools();
   setTimeout(()=>{try{if(map)map.invalidateSize()}catch(e){}},60);
 }
 function updateMapTools(){
-  let bc=$('btn-collapse'),bl=$('btn-live'),bw=$('btn-wake');
+  let bc=$('btn-collapse');
   if(bc){bc.textContent=S.collapsed?'정보 보기':'지도 크게';bc.classList.toggle('active',!!S.collapsed)}
-  if(bl){bl.classList.toggle('active',!!S.live)}
-  if(bw){bw.textContent=S.wake?'안꺼짐 ON':'화면 안꺼짐';bw.classList.toggle('active',!!S.wake)}
 }
 function toggleCollapse(){S.collapsed=!S.collapsed;applyScreenState()}
-function toggleLiveMode(){S.live=!S.live;if(S.live)S.collapsed=false;applyScreenState();if(S.r)rIP(gD()[S.di],S.di,gD().length)}
-async function requestWake(silent){
-  if(!('wakeLock' in navigator)){if(!silent)alert('이 브라우저는 화면 안꺼짐을 지원하지 않습니다');return false}
-  try{
-    wakeSentinel = await navigator.wakeLock.request('screen');
-    S.wake = true;
-    wakeSentinel.addEventListener('release',()=>{if(S.wake&&document.visibilityState==='visible')requestWake(true); updateMapTools()});
-    updateMapTools();
-    return true;
-  }catch(e){
-    if(!silent)alert('화면 안꺼짐을 켤 수 없어요. 브라우저/절전모드를 확인하세요.');
-    return false;
-  }
-}
-async function releaseWake(silent){
-  try{if(wakeSentinel){await wakeSentinel.release();wakeSentinel=null}}catch(e){}
-  S.wake=false; updateMapTools(); return true;
-}
-async function toggleWake(){ if(S.wake) return releaseWake(false); return requestWake(false) }
 function setStartHour(h){ S.startHr=Math.max(4,Math.min(13,Math.round(h*4)/4)); try{localStorage.setItem('wrg_startHr',String(S.startHr))}catch(e){} if(S.r)rIP(gD()[S.di],S.di,gD().length); updateMapTools(); }
 function customStartHour(){
   let v=prompt('출발 시각을 입력하세요 (예: 7:30)', fmtHM(S.startHr)); if(!v) return;
@@ -549,7 +523,7 @@ function buildLiveHud(day,qa){
   if(qa.maxSupplyGap>=8)status.push('물 1L+ 권장');
   let finishTone=finish>=19?'<span class="qa-chip bad">야간 위험</span>':(finish>=18?'<span class="qa-chip warn">해지기 전 마무리 권장</span>':'<span class="qa-chip good">완주 여유</span>');
   return `<div class="live-hud">
-    <div class="hd"><div><b>🎥 방송/현장 요약</b><div class="sub">걷는 중 바로 결정해야 하는 정보만 모아봤어요</div></div>${finishTone}</div>
+    <div class="hd"><div><b>📋 오늘 일정 요약</b><div class="sub">출발 시각, 식사, 보급 등 핵심 정보 요약</div></div>${finishTone}</div>
     <div class="time-pills">
       <button ${Math.abs(S.startHr-6.5)<0.01?'class="active"':''} onclick="setStartHour(6.5)">06:30</button>
       <button ${Math.abs(S.startHr-8)<0.01?'class="active"':''} onclick="setStartHour(8)">08:00</button>
@@ -572,13 +546,12 @@ function buildLiveHud(day,qa){
     <div class="hud-note">${S.gps&&mla!=null?'GPS 기준 재안내 가능 · 가까운 계획 지점 '+nearestWaypointLabel(day):'GPS를 켜면 현재 위치 기준으로 다음 지점 안내가 더 정확해져요'}</div>
   </div>`;
 }
-document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible'&&S.wake)requestWake(true) });
 
 /* =============== NAV =============== */
-function selRoute(id){S.r=id;S.p='standard';S.di=0;$('screen-home').classList.remove('active');let rs=$('screen-route');rs.classList.add('active');rs.className='screen active'+(id==='B'?' route-b':'');$('rt').textContent=R[id].nm;updP();rTabs();applyScreenState();initMap();sDay(0)}
-function goHome(){S.r=null;S.collapsed=false;S.live=false;if(wid){navigator.geolocation.clearWatch(wid);wid=null;S.gps=false}if(S.wake){releaseWake(true);S.wake=false}applyScreenState();document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));$('screen-home').classList.add('active')}
+function selRoute(id){S.r=id;S.p='standard';S.di=0;try{localStorage.setItem('wrg_route',id);localStorage.setItem('wrg_pace','standard');localStorage.setItem('wrg_day','0')}catch(e){}$('screen-home').classList.remove('active');let rs=$('screen-route');rs.classList.add('active');rs.className='screen active'+(id==='B'?' route-b':'');$('rt').textContent=R[id].nm;updP();rTabs();applyScreenState();initMap();sDay(0)}
+function goHome(){S.r=null;S.collapsed=false;if(wid){navigator.geolocation.clearWatch(wid);wid=null;S.gps=false}applyScreenState();document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));$('screen-home').classList.add('active')}
 function showHelp(){$('screen-home').classList.remove('active');$('screen-help').classList.add('active')}
-function setP(p){S.p=p;S.di=0;updP();rTabs();sDay(0)}
+function setP(p){S.p=p;S.di=0;try{localStorage.setItem('wrg_pace',p);localStorage.setItem('wrg_day','0')}catch(e){}updP();rTabs();sDay(0)}
 function updP(){let b=document.querySelectorAll('#pace-bar button');b[0].classList.toggle('active',S.p==='relaxed');b[1].classList.toggle('active',S.p==='standard');if(b[2])b[2].classList.toggle('active',S.p==='aggressive');let ag=$('btn-aggressive');if(ag)ag.style.display=(S.r==='A'?'':'none')}
 function pDay(){if(S.di>0)sDay(S.di-1)}function nDay(){let d=gD();if(S.di<d.length-1)sDay(S.di+1)}
 function gD(){return R[S.r].paces[S.p].days}
@@ -589,7 +562,7 @@ function initMap(){if(map){map.remove();map=null}map=L.map('map',{zoomControl:fa
 function mI(e,c,sz){sz=sz||34;return L.divIcon({html:'<div style="background:'+c+';border-radius:50%;width:'+sz+'px;height:'+sz+'px;display:flex;align-items:center;justify-content:center;font-size:'+(sz*.48)+'px;border:2.5px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.35)">'+e+'</div>',iconSize:[sz,sz],iconAnchor:[sz/2,sz/2],popupAnchor:[0,-sz/2-2],className:''})}
 function clr(){mks.forEach(m=>map.removeLayer(m));mks=[];mf=[];ms=[];mst=[];mcv=[];if(rl){map.removeLayer(rl);rl=null}}
 
-function sDay(idx){S.di=idx;let d=gD(),dy=d[idx],tabs=document.querySelectorAll('#day-tabs button');tabs.forEach((t,i)=>t.classList.toggle('active',i===idx));if(tabs[idx])tabs[idx].scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});clr();let co=[];
+function sDay(idx){S.di=idx;try{localStorage.setItem('wrg_day',String(idx))}catch(e){}let d=gD(),dy=d[idx],tabs=document.querySelectorAll('#day-tabs button');tabs.forEach((t,i)=>t.classList.toggle('active',i===idx));if(tabs[idx])tabs[idx].scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});clr();let co=[];
 // Waypoints
 dy.w.forEach(w=>{let e='📍',c='#3498db';if(w.tp==='start'){e='🚩';c='#27ae60'}if(w.tp==='goal'){e='🏁';c='#e74c3c'}let m=L.marker([w.la,w.lo],{icon:mI(e,c,w.tp==='start'||w.tp==='goal'?42:34)}).addTo(map);m.bindPopup(mkPop(w.n,w.ds),{maxWidth:280});mks.push(m);co.push([w.la,w.lo])});
 // Food
@@ -936,9 +909,20 @@ try{localStorage.setItem('wrg_dark',document.body.classList.contains('dark')?'1'
     let fs=localStorage.getItem('wrg_fs');
     let dk=localStorage.getItem('wrg_dark');
     let sh=localStorage.getItem('wrg_startHr');
+    let rt=localStorage.getItem('wrg_route');
+    let pc=localStorage.getItem('wrg_pace');
+    let dy=localStorage.getItem('wrg_day');
     if(fs)document.documentElement.style.setProperty('--fs',Math.max(14,Math.min(28,parseInt(fs,10)))+'px');
     if(dk==='1')document.body.classList.add('dark');
     if(sh&&!Number.isNaN(parseFloat(sh)))S.startHr=parseFloat(sh);
+    if(rt&&R[rt]){
+      setTimeout(()=>{
+        selRoute(rt);
+        if(pc&&R[rt].paces[pc]&&pc!=='standard'){S.p=pc;try{localStorage.setItem('wrg_pace',pc)}catch(e){}updP();rTabs()}
+        let di=parseInt(dy||'0',10);
+        if(!Number.isNaN(di)&&di>=0&&di<gD().length)sDay(di);
+      },0);
+    }
   }catch(e){}
   updateMapTools();
 })();
