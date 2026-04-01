@@ -942,13 +942,10 @@ let u=buildWalkRouteUrl(w[0],mids,last);
 openNmapUrl(u,fallback)}
 function navTo(la,lo,nm){
 let start=(mla!=null&&mlo!=null)?{la:mla,lo:mlo,n:'현재 위치'}:null;
-if(!start){
-  let day=gD()[S.di];
-  if(day&&day.w&&day.w.length)start={la:day.w[0].la,lo:day.w[0].lo,n:cleanName(day.w[0].n)};
-}
+/* GPS 꺼져 있으면 출발지를 비워서 네이버 앱이 '내 위치'를 자동 사용하도록 함 */
 let dest={la:la,lo:lo,n:nm};
 let u=buildWalkRouteUrl(start,[],dest);
-let web=start?webDirUrl(start,dest):webPlaceUrl(la,lo,nm);
+let web=webPlaceUrl(la,lo,nm);
 openNmapUrl(u,web)}
 function openPlace(la,lo,nm){
 let u='nmap://place?lat='+la+'&lng='+lo+'&name='+encodeURIComponent(nm)+'&appname='+appnameParam();
