@@ -415,10 +415,9 @@ function openNmapUrl(nmapUrl,webFallback){
       document.addEventListener('visibilitychange',c);
       location.href=nmapUrl;return;
     }
-    if(webFallback){window.open(webFallback,'_blank');return}
-    location.href=nmapUrl;
+    alert('길안내는 모바일 네이버 지도 앱에서 이용해주세요.\n(PC 웹에서는 도보 경로를 지원하지 않습니다)');return;
   }catch(e){
-    if(webFallback)window.open(webFallback,'_blank');
+    alert('길안내는 모바일 네이버 지도 앱에서 이용해주세요.');
   }
 }
 function buildIntentUrl(nmapUrl,fallbackUrl){
@@ -900,11 +899,7 @@ let bl=new Blob([g],{type:'application/gpx+xml'}),u=URL.createObjectURL(bl),a=do
 function ex(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 
 /* =============== NAVER MAP NAV =============== */
-function webDirUrl(s,e){
-  /* 웹 fallback: 좌표 기반 directions는 도로 밖 경유지(한강공원, 자전거길 등)에서 실패.
-     도착지 장소 검색으로 열어서 사용자가 길찾기를 직접 탭하도록 유도 */
-  return webPlaceUrl(e.la, e.lo, cleanName(e.n));
-}
+function webDirUrl(s,e){return 'https://map.naver.com/v5/directions/'+s.la+','+s.lo+','+encodeURIComponent(cleanName(s.n))+',/'+e.la+','+e.lo+','+encodeURIComponent(cleanName(e.n))+',/-/walk'}
 function webPlaceUrl(la,lo,nm){return 'https://map.naver.com/v5/search/'+encodeURIComponent(nm)+'?c='+lo+','+la+',15,0,0,0,dh'}
 function trimMids(mids,start,end){
   /* 네이버 도보 경로는 경유지간 8km+ 구간이 있으면 실패하는 경우가 많음.
