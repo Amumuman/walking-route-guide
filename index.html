@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=3.0,user-scalable=yes">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>국토대장정 가이드</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"/>
@@ -899,6 +902,25 @@ function ex(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').r
 /* =============== NAVER MAP NAV =============== */
 function webDirUrl(s,e){return 'https://map.naver.com/v5/directions/'+s.la+','+s.lo+','+encodeURIComponent(cleanName(s.n))+',/'+e.la+','+e.lo+','+encodeURIComponent(cleanName(e.n))+',/-/walk'}
 function webPlaceUrl(la,lo,nm){return 'https://map.naver.com/v5/search/'+encodeURIComponent(nm)+'?c='+lo+','+la+',15,0,0,0,dh'}
+function trimMids(mids,start,end){
+  /* 네이버 도보 경로는 경유지간 8km+ 구간이 있으면 실패하는 경우가 많음.
+     긴 구간이 있으면 경유지를 줄여서 네이버가 자체 경로를 찾게 함 */
+  if(!mids||!mids.length)return mids;
+  let pts=[start,...mids,end];
+  let hasLong=false;
+  for(let i=0;i<pts.length-1;i++){if(hv(pts[i].la,pts[i].lo,pts[i+1].la,pts[i+1].lo)>7){hasLong=true;break}}
+  if(!hasLong)return mids;
+  /* 긴 구간 발견: 가까운 경유지만 남기고 먼 경유지 제거 */
+  let kept=[];
+  for(let i=0;i<mids.length;i++){
+    let prev=i===0?start:mids[i-1];
+    let next=i===mids.length-1?end:mids[i+1];
+    let dPrev=hv(prev.la,prev.lo,mids[i].la,mids[i].lo);
+    let dNext=hv(mids[i].la,mids[i].lo,next.la,next.lo);
+    if(dPrev<7&&dNext<7)kept.push(mids[i]);
+  }
+  return kept;
+}
 function startNav(){
 let d=gD(),dy=d[S.di],w=dy.w;if(!w||w.length<2)return;
 let first=w[0],last=w[w.length-1];
@@ -910,13 +932,14 @@ if(mla!=null&&mlo!=null){
   let remaining=w.slice(Math.min(cursor,w.length-1));
   if(!remaining.length)remaining=[w[w.length-1]];
   let end=remaining[remaining.length-1];
-  let mids=remaining.slice(0,-1);
+  let mids=trimMids(remaining.slice(0,-1),{la:mla,lo:mlo},end);
   let u=buildWalkRouteUrl({la:mla,lo:mlo,n:'현재 위치'},mids,end);
   fallback=webDirUrl({la:mla,lo:mlo,n:'현재 위치'},end);
   openNmapUrl(u,fallback);
   return;
 }
-let u=buildWalkRouteUrl(w[0],w.slice(1,-1),last);
+let mids=trimMids(w.slice(1,-1),first,last);
+let u=buildWalkRouteUrl(w[0],mids,last);
 openNmapUrl(u,fallback)}
 function navTo(la,lo,nm){
 let start=(mla!=null&&mlo!=null)?{la:mla,lo:mlo,n:'현재 위치'}:null;
