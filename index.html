@@ -639,7 +639,7 @@ function buildLiveHud(day,qa){
 }
 
 /* =============== NAV =============== */
-function selRoute(id){S.r=id;S.p='standard';S.di=0;$('screen-home').classList.remove('active');let rs=$('screen-route');rs.classList.add('active');rs.className='screen active'+(id==='B'?' route-b':'');$('rt').textContent=R[id].nm;updP();rTabs();applyScreenState();initMap();sDay(0);saveViewState()}
+function selRoute(id){S.r=id;S.p='standard';S.di=0;S.collapsed=false;$('screen-home').classList.remove('active');let rs=$('screen-route');rs.classList.add('active');rs.className='screen active'+(id==='B'?' route-b':'');$('rt').textContent=R[id].nm;updP();rTabs();applyScreenState();initMap();sDay(0);saveViewState()}
 function goHome(){S.r=null;S.collapsed=false;if(wid){navigator.geolocation.clearWatch(wid);wid=null;S.gps=false}applyScreenState();history.replaceState(null,'',location.pathname);document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));$('screen-home').classList.add('active')}
 function showHelp(){$('screen-home').classList.remove('active');$('screen-help').classList.add('active')}
 function setP(p){S.p=p;S.di=0;updP();rTabs();sDay(0);saveViewState()}
